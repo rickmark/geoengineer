@@ -5,12 +5,13 @@
 ########################################################################
 class GeoEngineer::Backend
   attr_reader :id
+
   include HasAttributes
   include HasSubResources
 
-  def initialize(id, &block)
+  def initialize(id, &)
     @id = id
-    instance_exec(self, &block) if block_given?
+    instance_exec(self, &) if block_given?
   end
 
   def terraform_id

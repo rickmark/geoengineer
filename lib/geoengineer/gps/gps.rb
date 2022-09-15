@@ -16,29 +16,27 @@ class GeoEngineer::GPS
 
   def self.json_schema
     node_names = {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => {
-        "type":  "object"
+        type:  "object"
       }
     }
 
     node_types = {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => node_names
     }
 
     configurations = {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => node_types
     }
 
-    environments = {
-      "type":  "object",
+    {
+      type:  "object",
       "additionalProperties" => configurations,
-      "minProperties": 1
+      minProperties: 1
     }
-
-    environments
   end
 
   # Load
@@ -65,7 +63,7 @@ class GeoEngineer::GPS
   # Parse
   def self.parse_dir(dir, schema = nil)
     # Load, expand then merge all yml files
-    base_hash = Dir["#{dir}**/*#{GPS_FILE_EXTENSTION}"].reduce({}) do |new_hash, gps_file|
+    Dir["#{dir}**/*#{GPS_FILE_EXTENSTION}"].reduce({}) do |new_hash, gps_file|
       begin
         # Merge Keys don't work with YAML.safe_load
         # since we are also loading Ruby safe_load is not needed
@@ -82,7 +80,6 @@ class GeoEngineer::GPS
         raise LoadError, "Could not load #{gps_file}: #{e.message}"
       end
     end
-    base_hash
   end
 
   def self.load_projects(dir, constants)
@@ -94,6 +91,7 @@ class GeoEngineer::GPS
   end
 
   attr_reader :base_hash, :constants
+
   def initialize(base_hash = {}, constants = {})
     # Base Hash is the unedited input, useful for debugging
     @base_hash = base_hash
@@ -154,7 +152,7 @@ class GeoEngineer::GPS
     HashUtils.json_dup(expanded_hash)
   end
 
-  def loop_projects_hash(projects_hash, &block)
+  def loop_projects_hash(projects_hash, &)
     projects_hash.each_pair do |project, environments|
       # If the environments includes _default, pull out its value, and loop over
       # all other known environments and add it back in, if it doesn't already
@@ -172,7 +170,7 @@ class GeoEngineer::GPS
 
       environments.each_pair do |environment, configurations|
         configurations.each_pair do |configuration, nodes|
-          loop_nodes(project, environment, configuration, nodes, &block)
+          loop_nodes(project, environment, configuration, nodes, &)
         end
       end
     end
@@ -227,9 +225,9 @@ class GeoEngineer::GPS
 
   # This method takes the file name of the geoengineer project file
   # it calculates the location of the gps file
-  def partial_of(file_name, &block)
+  def partial_of(file_name, &)
     # Make relative to pwd
-    file_name = file_name.sub(Dir.pwd + "/", "")
+    file_name = file_name.sub("#{Dir.pwd}/", "")
 
     projects_str, org_name, project_name = file_name.gsub(".rb", "").split("/", 3)
 
@@ -241,10 +239,10 @@ class GeoEngineer::GPS
     return if @created_projects[full_name] == true
     @created_projects[full_name] = true
 
-    create_project(org_name, project_name, env, &block)
+    create_project(org_name, project_name, env, &)
   end
 
-  def create_project(org, name, environment, &block)
+  def create_project(org, name, environment, &)
     project_name = "#{org}/#{name}"
     environment_name = environment.name
     project_environments = project_environments(project_name)
@@ -283,7 +281,7 @@ class GeoEngineer::GPS
   end
 
   def project_environments(project)
-    @base_hash.dig(project)&.keys || []
+    @base_hash[project]&.keys || []
   end
 
   def project_configurations(project, environment)

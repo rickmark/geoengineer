@@ -27,9 +27,10 @@ class GeoEngineer::Resources::AwsElasticacheCluster < GeoEngineer::Resource
 
     # Security groups workaround
     security_group_ids.each_with_index do |sg, i|
-      if sg.is_a?(GeoEngineer::Resource)
+      case sg
+      when GeoEngineer::Resource
         attributes["security_group_ids.#{i}"] = sg._terraform_id
-      elsif sg.is_a?(String)
+      when String
         attributes["security_group_ids.#{i}"] = sg
       else
         raise SecurityGroupError, "Please pass a Geo Resource or string ID"

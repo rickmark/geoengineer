@@ -9,7 +9,7 @@ describe("HasValidations") do
 
     class Valid
       include HasValidations
-      validate -> { nil }
+      validate -> {}
     end
 
     valid   = Valid.new().errors

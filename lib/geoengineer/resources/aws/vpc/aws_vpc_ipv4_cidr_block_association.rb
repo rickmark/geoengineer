@@ -37,7 +37,7 @@ class GeoEngineer::Resources::AwsVpcIpv4CidrBlockAssociation < GeoEngineer::Reso
     # => 1
     # irb(main):005:0> slash_16.rel(slash_15)
     # => -1
-    if ipv4net_source.rel(ipv4net_dest) == 0 || ipv4net_source.rel(ipv4net_dest) == 1 # rubocop:disable Style/NumericPredicate, Style/IfUnlessModifier, Metrics/LineLength
+    if ipv4net_source.rel(ipv4net_dest) == 0 || ipv4net_source.rel(ipv4net_dest) == 1 # rubocop:disable Style/NumericPredicate, /
       return true
     end
     return false # rubocop:disable Style/RedundantReturn
@@ -52,8 +52,8 @@ class GeoEngineer::Resources::AwsVpcIpv4CidrBlockAssociation < GeoEngineer::Reso
 
     remaining_restricted_ranges.each do |r|
       if a_subnet_or_equal?(r, additional_cidr)
-        errors << err_msg("Primary VPC range [#{primary_cidr}] Cannot add additional CIDR blocks from the restricted "\
-          "ranges [ #{remaining_restricted_ranges.join(', ')} ]")
+        errors << err_msg("Primary VPC range [#{primary_cidr}] Cannot add additional CIDR blocks from the restricted " \
+                          "ranges [ #{remaining_restricted_ranges.join(', ')} ]")
       end
     end
   end

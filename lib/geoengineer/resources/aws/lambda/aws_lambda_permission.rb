@@ -22,15 +22,14 @@ class GeoEngineer::Resources::AwsLambdaPermission < GeoEngineer::Resource
   end
 
   def self._fetch_functions(provider)
-    AwsClients
-      .lambda(provider)
+    provider
       .list_functions['functions']
       .map(&:to_h)
   end
 
   def self._fetch_policy(provider, function)
-    policy = AwsClients.lambda(provider)
-                       .get_policy({ function_name: function[:function_name] })&.policy
+    policy = provider
+             .get_policy({ function_name: function[:function_name] })&.policy
     parsed = _parse_policy(policy) if policy
     function.merge({ policy: parsed }) if parsed
   end
@@ -71,7 +70,7 @@ class GeoEngineer::Resources::AwsLambdaPermission < GeoEngineer::Resource
   end
 
   def remote_resource_params
-    params = { function_name: function_name }
+    params = { function_name: }
     params[:qualifier] = qualifier if qualifier
 
     begin

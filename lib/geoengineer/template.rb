@@ -32,9 +32,9 @@ class GeoEngineer::Template
     @environment = environment
   end
 
-  def resource(type, id, &block)
+  def resource(type, id, &)
     return find_resource(type, id) unless block_given?
-    resource = create_resource(type, id, &block)
+    resource = create_resource(type, id, &)
     resource.template = self
     resource.environment = @environment
     resource.project = @project if @project
@@ -105,15 +105,15 @@ class GeoEngineer::Template
 
   def _assume_policy(service)
     {
-      "Version": "2012-10-17",
-      "Statement": [
+      Version: "2012-10-17",
+      Statement: [
         {
-          "Sid": "",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": service
+          Sid: "",
+          Effect: "Allow",
+          Principal: {
+            Service: service
           },
-          "Action": "sts:AssumeRole"
+          Action: "sts:AssumeRole"
         }
       ]
     }.to_json

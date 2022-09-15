@@ -3,15 +3,15 @@ require_relative './test_nodes'
 
 describe GeoEngineer::GPS::Constants do
   it 'sets the name' do
-    c = GeoEngineer::GPS::Constants.new({ "e": {} })
+    c = GeoEngineer::GPS::Constants.new({ e: {} })
     expect(c.dereference("e", "name")).to eq "e"
   end
 
   context 'for_environment' do
     it 'returns all including _global but overrides' do
       c = GeoEngineer::GPS::Constants.new({
-                                            "e": { "override": "no" },
-                                            "_global": { "override": "yes", "test": "hello" }
+                                            e: { override: "no" },
+                                            _global: { override: "yes", test: "hello" }
                                           })
       expect(c.for_environment("e")["override"]).to eq "no"
       expect(c.for_environment("e")["test"]).to eq "hello"
@@ -20,23 +20,23 @@ describe GeoEngineer::GPS::Constants do
 
   context 'dereference' do
     it 'looks in _global env' do
-      c = GeoEngineer::GPS::Constants.new({ "e": {}, "_global": { "test": "hello" } })
+      c = GeoEngineer::GPS::Constants.new({ e: {}, _global: { test: "hello" } })
       expect(c.dereference("e", "test")).to eq "hello"
     end
 
     it 'is overriden by env' do
-      c = GeoEngineer::GPS::Constants.new({ "e": { "test": "no" }, "_global": { "test": "hello" } })
+      c = GeoEngineer::GPS::Constants.new({ e: { test: "no" }, _global: { test: "hello" } })
       expect(c.dereference("e", "test")).to eq "no"
     end
 
     it 'works with falsey values' do
-      c = GeoEngineer::GPS::Constants.new({ "e": { "truthy?": true, "falsey?": false } })
+      c = GeoEngineer::GPS::Constants.new({ e: { truthy?: true, falsey?: false } })
       expect(c.dereference("e", "truthy?")).to eq true
       expect(c.dereference("e", "falsey?")).to eq false
     end
 
     it 'works with wildcards' do
-      c = GeoEngineer::GPS::Constants.new({ "a": { "foo": 1 }, "b": { "foo": 2 } })
+      c = GeoEngineer::GPS::Constants.new({ a: { foo: 1 }, b: { foo: 2 } })
       expect(c.dereference("*", "foo")).to eq [1, 2]
     end
   end

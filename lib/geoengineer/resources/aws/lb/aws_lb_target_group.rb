@@ -46,7 +46,7 @@ class GeoEngineer::Resources::AwsLbTargetGroup < GeoEngineer::Resource
 
   def self._fetch_all_target_groups(continue, target_groups, client, marker)
     return target_groups unless continue
-    target_group_resp = client.describe_target_groups({ marker: marker,
+    target_group_resp = client.describe_target_groups({ marker:,
                                                         page_size: MAX_RESOURCES_PER_REQUEST })
     _fetch_all_target_groups(target_group_resp.next_page?,
                              target_groups + target_group_resp['target_groups'],
@@ -56,7 +56,7 @@ class GeoEngineer::Resources::AwsLbTargetGroup < GeoEngineer::Resource
 
   def self._set_attributes(client, target_group)
     attributes = client.describe_target_group_attributes({ target_group_arn: target_group[:target_group_arn] })
-    attributes_h = attributes.attributes.map { |item| [item[:key], item[:value]] }.to_h
+    attributes_h = attributes.attributes.to_h { |item| [item[:key], item[:value]] }
     unless attributes_h["deregistration_delay.timeout_seconds"].nil?
       target_group[:_deregistration_delay] =
         attributes_h["deregistration_delay.timeout_seconds"]

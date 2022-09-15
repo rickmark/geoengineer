@@ -9,7 +9,7 @@ require_relative "./helpers"
 class GeoEngineer::Resources::AwsApiGatewayAccount < GeoEngineer::Resource
   include GeoEngineer::ApiGatewayHelpers
 
-  after :initialize, -> { _terraform_id -> { nil } }
+  after :initialize, -> { _terraform_id -> {} }
   after :initialize, -> { _geo_id -> { rand(36**20).to_s(36) } }
 
   def support_tags?

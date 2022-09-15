@@ -6,13 +6,13 @@
 class GeoEngineer::Output
   attr_reader :id, :value
 
-  def initialize(id, value, &block)
+  def initialize(id, value, &)
     @id    = id
     @value = value
   end
 
   def to_terraform_json
-    { id: { value: value } }
+    { id: { value: } }
   end
 
   def to_terraform

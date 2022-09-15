@@ -5,7 +5,7 @@ module GeoCLI::StatusCommand
     {
       codified: codified.count,
       uncodified: uncodified.count,
-      total: total,
+      total:,
       percent: (100.0 * codified.count) / total
     }
   end

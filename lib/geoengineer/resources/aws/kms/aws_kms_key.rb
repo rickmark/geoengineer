@@ -20,7 +20,7 @@ class GeoEngineer::Resources::AwsKmsKey < GeoEngineer::Resource
 
     while resp.truncated
       marker = resp.next_marker
-      resp = AwsClients.kms(provider).list_keys({ limit: 1000, marker: marker })
+      resp = AwsClients.kms(provider).list_keys({ limit: 1000, marker: })
       keys += resp[:keys]
     end
 

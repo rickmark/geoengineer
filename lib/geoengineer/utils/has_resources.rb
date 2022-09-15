@@ -11,8 +11,7 @@ module HasResources
     def get_resource_class_from_type(type)
       c_name = type.split('_').collect(&:capitalize).join
       c_name = "GeoEngineer::Resources::#{c_name}"
-      clazz = Object.const_defined?(c_name) ? Object.const_get(c_name) : GeoEngineer::Resource
-      clazz
+      Object.const_defined?(c_name) ? Object.const_get(c_name) : GeoEngineer::Resource
     end
   end
 
@@ -49,11 +48,11 @@ module HasResources
   end
 
   # Returns: { type1: { value1: [ ] }, type2: { value2: [ ] } }
-  def resources_of_type_grouped_by(&block)
+  def resources_of_type_grouped_by(&)
     grouped = resources_grouped_by(all_resources, &:_type)
 
     grouped_arr = grouped.map do |type, grouped_resources|
-      [type, resources_grouped_by(grouped_resources, &block)]
+      [type, resources_grouped_by(grouped_resources, &)]
     end
 
     grouped_arr.to_h
@@ -64,12 +63,12 @@ module HasResources
   end
 
   # Factory to create resource and attach
-  def create_resource(type, id, &block)
+  def create_resource(type, id, &)
     # This will look for a class that is defined by the type so it can override functionality
     # For example, if `type='aws_security_group'` then the class would be `AwsSecurityGroup`
     clazz = self.class.get_resource_class_from_type(type)
 
-    res = clazz.new(type, id, &block)
+    res = clazz.new(type, id, &)
     resources << res # Add the resource
     res
   end

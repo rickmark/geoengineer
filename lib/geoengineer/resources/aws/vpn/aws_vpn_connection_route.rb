@@ -20,7 +20,7 @@ class GeoEngineer::Resources::AwsVpnConnectionRoute < GeoEngineer::Resource
 
   # Is the VPN connection id a terraform ref or an id
   def terraform_ref?
-    /^\${[a-zA-Z0-9\._-]+}$/.match(vpn_connection_id)
+    /^\${[a-zA-Z0-9._-]+}$/.match(vpn_connection_id)
   end
 
   def to_terraform_state

@@ -1,4 +1,3 @@
-require 'rake'
 require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:default) do |t|
@@ -8,8 +7,8 @@ desc 'Generate documentation'
 begin
   require 'yard'
   YARD::Rake::YardocTask.new do |t|
-    t.files   = ['lib/**/*.rb', '-', 'docs/*.md']
-    t.options = ['--main', 'README.md', '-o', './docs', '--asset', './assets']
+    t.files   = %w[lib/**/*.rb - docs/*.md]
+    t.options = %w[--main README.md -o ./docs --asset ./assets]
   end
 rescue LoadError
   task :yard do puts "Please install yard first!"; end

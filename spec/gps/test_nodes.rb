@@ -2,12 +2,12 @@ class GeoEngineer::GPS::Nodes::TestNode < GeoEngineer::GPS::Node
   define_resource "aws_elb", :elb
   def json_schema
     {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => false,
-      "properties":  {
-        "name":  {
-          "type":  "string",
-          "default":  "default"
+      properties:  {
+        name:  {
+          type:  "string",
+          default:  "default"
         }
       }
     }
@@ -24,12 +24,12 @@ end
 class GeoEngineer::GPS::Nodes::TestMetaNode < GeoEngineer::GPS::MetaNode
   def json_schema
     {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => false,
-      "properties":  {
-        "name":  {
-          "type":  "string",
-          "default":  "default"
+      properties:  {
+        name:  {
+          type:  "string",
+          default:  "default"
         }
       }
     }
@@ -50,12 +50,12 @@ end
 class GeoEngineer::GPS::Nodes::TestMetaMetaNode < GeoEngineer::GPS::MetaNode
   def json_schema
     {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => false,
-      "properties":  {
-        "name":  {
-          "type":  "string",
-          "default":  "default"
+      properties:  {
+        name:  {
+          type:  "string",
+          default:  "default"
         }
       }
     }
@@ -78,15 +78,15 @@ class GeoEngineer::GPS::Nodes::TestCircularMeta < GeoEngineer::GPS::Nodes::TestM
 
   def json_schema
     {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => false,
-      "properties":  {
-        "name":  {
-          "type":  "string",
-          "default":  "default"
+      properties:  {
+        name:  {
+          type:  "string",
+          default:  "default"
         },
-        "child_resource": {
-          "type": "string"
+        child_resource: {
+          type: "string"
         }
       }
     }
@@ -103,15 +103,15 @@ class GeoEngineer::GPS::Nodes::TestCircularNode < GeoEngineer::GPS::Nodes::TestN
 
   def json_schema
     {
-      "type":  "object",
+      type:  "object",
       "additionalProperties" => false,
-      "properties":  {
-        "name":  {
-          "type":  "string",
-          "default":  "default"
+      properties:  {
+        name:  {
+          type:  "string",
+          default:  "default"
         },
-        "child_resource": {
-          "type": "string"
+        child_resource: {
+          type: "string"
         }
       }
     }

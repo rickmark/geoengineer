@@ -12,7 +12,7 @@ class GeoEngineer::Resources::AwsEfsFileSystem < GeoEngineer::Resource
   def self._fetch_remote_resources(provider)
     AwsClients.efs(provider).describe_file_systems['file_systems'].map(&:to_h).map do |file_system|
       file_system_id = file_system[:file_system_id]
-      tags = AwsClients.efs(provider).describe_tags({ file_system_id: file_system_id })[:tags]
+      tags = AwsClients.efs(provider).describe_tags({ file_system_id: })[:tags]
       file_system_name = tags.find { |t| t[:key] == "Name" }[:value]
       file_system.merge(
         {

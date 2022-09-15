@@ -13,7 +13,7 @@ class GeoEngineer::GPS::Constants
 
     # attach constants and environment to YamlTags
     constants.each_pair do |environment, vals|
-      GeoEngineer::GPS::YamlTag.add_tag_context(vals, { constants: self, context: { environment: environment } })
+      GeoEngineer::GPS::YamlTag.add_tag_context(vals, { constants: self, context: { environment: } })
     end
 
     @constants = HashUtils.json_dup(@constants)

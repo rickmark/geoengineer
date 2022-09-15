@@ -21,11 +21,11 @@ class GeoEngineer::Project
   validate -> { validate_required_attributes([:environments]) }
   validate -> { all_resources.map(&:errors).flatten }
 
-  def initialize(org, name, environment, &block)
+  def initialize(org, name, environment, &)
     @org = org
     @name = name
     @environment = environment
-    instance_exec(self, &block) if block_given?
+    instance_exec(self, &) if block_given?
     execute_lifecycle(:after, :initialize)
   end
 
@@ -37,9 +37,9 @@ class GeoEngineer::Project
     "#{org}/#{name}"
   end
 
-  def resource(type, id, &block)
+  def resource(type, id, &)
     return find_resource(type, id) unless block_given?
-    resource = create_resource(type, id, &block)
+    resource = create_resource(type, id, &)
     resource.project = self
     resource.environment = @environment
     resource

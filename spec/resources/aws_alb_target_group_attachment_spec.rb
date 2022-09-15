@@ -29,23 +29,23 @@ describe GeoEngineer::Resources::AwsAlbTargetGroupAttachment do
       aws_client.stub_responses(
         :describe_target_groups,
         {
-          "target_groups": [
+          target_groups: [
             {
-              "health_check_path": "/",
-              "health_check_interval_seconds": 35,
-              "target_group_arn": default_target_group_arn,
-              "target_type": "lambda",
-              "matcher": {
-                "http_code": "200"
+              health_check_path: "/",
+              health_check_interval_seconds: 35,
+              target_group_arn: default_target_group_arn,
+              target_type: "lambda",
+              matcher: {
+                http_code: "200"
               },
-              "load_balancer_arns": [
+              load_balancer_arns: [
                 "arn:aws:elasticloadbalancing:us-east-1:12345678:loadbalancer/app/test/12345abc"
               ],
-              "healthy_threshold_count": 5,
-              "health_check_timeout_seconds": 30,
-              "health_check_enabled": false,
-              "unhealthy_threshold_count": 2,
-              "target_group_name": "target_group"
+              healthy_threshold_count: 5,
+              health_check_timeout_seconds: 30,
+              health_check_enabled: false,
+              unhealthy_threshold_count: 2,
+              target_group_name: "target_group"
             }
           ]
         }
@@ -53,16 +53,16 @@ describe GeoEngineer::Resources::AwsAlbTargetGroupAttachment do
       aws_client.stub_responses(
         :describe_target_health,
         {
-          "target_health_descriptions": [
+          target_health_descriptions: [
             {
-              "target": {
-                "availability_zone": "all",
-                "id": default_lambda_arn
+              target: {
+                availability_zone: "all",
+                id: default_lambda_arn
               },
-              "target_health": {
-                "state": "unused",
-                "reason": "Target.NotInUse",
-                "description": "Target group is not configured to receive traffic from the load balancer"
+              target_health: {
+                state: "unused",
+                reason: "Target.NotInUse",
+                description: "Target group is not configured to receive traffic from the load balancer"
               }
             }
           ]

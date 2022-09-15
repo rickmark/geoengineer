@@ -43,7 +43,7 @@ class GeoEngineer::Resources::AwsIamRole < GeoEngineer::Resource
 
   def self._fetch_all_roles(continue, roles, client, marker)
     return roles unless continue
-    role_resp = client.list_roles({ marker: marker })
+    role_resp = client.list_roles({ marker: })
     _fetch_all_roles(role_resp.is_truncated, roles + role_resp['roles'], client, role_resp.marker)
   end
 end

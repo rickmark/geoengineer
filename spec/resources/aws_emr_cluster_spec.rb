@@ -1,4 +1,4 @@
-require_relative '../spec_helper.rb'
+require_relative '../spec_helper'
 
 describe GeoEngineer::Resources::AwsEmrCluster do
   let(:aws_client) { AwsClients.emr }

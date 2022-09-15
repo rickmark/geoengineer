@@ -50,18 +50,18 @@ class GeoCLI
     ]
 
     files.each do |file|
-      File.delete(file) if File.exist?(file)
+      FileUtils.rm_f(file)
     end
   end
 
-  def create_environment(name, remote_state = false, &block)
+  def create_environment(name, remote_state = false, &)
     return @environment if @environment
     if name != @env_name
       puts "Not loading environment #{name} as env_name is #{@env_name}" if @verbose
       return NullObject.new
     end
 
-    @environment = GeoEngineer::Environment.new(name, remote_state, &block)
+    @environment = GeoEngineer::Environment.new(name, remote_state, &)
     init_tmp_dir(name)
     init_terraform_files()
     @environment

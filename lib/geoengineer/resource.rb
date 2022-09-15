@@ -8,6 +8,8 @@
 # A Resource can have arbitrary attributes, validation rules and lifecycle hooks
 ########################################################################
 class GeoEngineer::Resource
+  include T::Sig
+
   DEFAULT_PROVIDER = "default_provider".freeze
 
   include HasAttributes
@@ -23,7 +25,7 @@ class GeoEngineer::Resource
 
   validate -> { validate_required_attributes([:_geo_id]) }
 
-  def initialize(type, id, &block)
+  def initialize(type, id, &)
     @_type = type
     @id = id
 
@@ -35,7 +37,7 @@ class GeoEngineer::Resource
     # Most resources will have the same _geo_id and _terraform_id
     # Each resource must define _terraform_id
     _geo_id -> { _terraform_id }
-    instance_exec(self, &block) if block_given?
+    instance_exec(self, &) if block_given?
     execute_lifecycle(:after, :initialize)
   end
 
@@ -115,13 +117,13 @@ class GeoEngineer::Resource
     self
   end
 
-  def duplicate(new_id, &block)
+  def duplicate(new_id, &)
     parent = @project || @environment
     return unless parent
 
     duplicated = duplicate_resource(parent, self, new_id)
     duplicated.reset
-    duplicated.instance_exec(duplicated, &block) if block_given?
+    duplicated.instance_exec(duplicated, &) if block_given?
     duplicated.execute_lifecycle(:after, :initialize)
 
     duplicated
@@ -258,6 +260,8 @@ class GeoEngineer::Resource
   def self.clear_remote_resource_cache
     @_rr_cache = nil
   end
+
+  def self.handles_abstract_resource(resource, options = {}); end
 
   # VIEW METHODS
   def short_type

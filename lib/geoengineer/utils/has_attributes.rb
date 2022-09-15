@@ -15,23 +15,23 @@ module HasAttributes
     retrieve_attribute(key.to_s)
   end
 
-  def []=(key, val = nil, &block)
-    assign_attribute(key.to_s, [val], &block)
+  def []=(key, val = nil, &)
+    assign_attribute(key.to_s, [val], &)
   end
 
   def delete(key)
     attributes.delete(key.to_s)
   end
 
-  def assign_block(name, *args, &block)
+  def assign_block(name, *args, &)
     throw "#{self.class.inspect} cannot handle block"
   end
 
-  def assign_attribute(name, args, &block)
+  def assign_attribute(name, args, &)
     name = name[0...-1] if name.end_with?"="
     if block_given?
       # send to block
-      assign_block(name, *args, &block)
+      assign_block(name, *args, &)
     else
       # this is a setter
       val = args.length == 1 ? args[0] : args
@@ -77,10 +77,10 @@ module HasAttributes
   # 3. If the method has no arguments it will assume it is a getter and retrieve the value.
   #    If the retrieved value is a `Proc` it will execute it and store the returned value,
   #    this will allow for caching expensive calls and only calling if requested
-  def method_missing(name, *args, &block)
+  def method_missing(name, *args, &)
     name = name.to_s
     if args.length >= 1 || block_given?
-      assign_attribute(name, args, &block)
+      assign_attribute(name, args, &)
     elsif args.empty?
       retrieve_attribute(name)
     end
@@ -96,15 +96,16 @@ module HasAttributes
     attributes
       .select { |k, v| !k.nil? && !k.start_with?('_') }
       .map { |k, v| [k, terraform_attribute_ref(k)] }
-      .select { |k, v| !v.nil? }
+      .compact
       .to_h
   end
 
   def terraform_attribute_ref(k)
     v = retrieve_attribute(k)
-    if v.is_a? GeoEngineer::Resource # convert Resource to reference for terraform
+    case v
+    when GeoEngineer::Resource # convert Resource to reference for terraform
       v.to_ref
-    elsif v.is_a? Array # map resources if attribute is an array
+    when Array # map resources if attribute is an array
       v.map { |vi| vi.is_a?(GeoEngineer::Resource) ? vi.to_ref : vi }
     else
       v
@@ -114,7 +115,7 @@ module HasAttributes
   def _file(attribute, path, binding_obj = nil)
     raise "file #{path} not found" unless File.file?(path)
 
-    raw = File.open(path, "rb").read
+    raw = File.binread(path)
     interpolated = ERB.new(raw).result(binding_obj).to_s
 
     send(attribute, interpolated)
@@ -123,7 +124,7 @@ module HasAttributes
   def _json_file(attribute, path, binding_obj = nil)
     raise "file #{path} not found" unless File.file?(path)
 
-    raw = File.open(path, "rb").read
+    raw = File.binread(path)
     interpolated = ERB.new(raw).result(binding_obj).to_s
 
     # normalize JSON to prevent terraform from e.g. newlines as legitimate changes

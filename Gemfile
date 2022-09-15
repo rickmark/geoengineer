@@ -8,4 +8,5 @@ ruby File.read(File.join(File.dirname(__FILE__), '.ruby-version')).chomp
 # a development dependency but a CI one, so we don't want to constrain projects
 # that include geoengineer in their gemfile to use the same version of RuboCop
 # we use for development.
-gem 'rubocop', '0.66.0'
+gem 'rubocop'
+gem 'tapioca', require: false, group: :development

@@ -7,12 +7,12 @@ module HasProjects
   end
 
   # Factory for creating projects
-  def create_project(org, name, &block)
+  def create_project(org, name, &)
     # do not add the project a second time
     repository = "#{org}/#{name}"
     return projects[repository] if projects.key?(repository)
 
-    proj = GeoEngineer::Project.new(org, name, self, &block)
+    proj = GeoEngineer::Project.new(org, name, self, &)
     projects[repository] = proj
     proj
   end

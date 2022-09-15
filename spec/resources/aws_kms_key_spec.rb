@@ -16,7 +16,7 @@ describe GeoEngineer::Resources::AwsKmsKey do
         :list_keys,
         {
           keys: [
-            { key_id: key_id }
+            { key_id: }
           ]
         }
       )
@@ -24,7 +24,7 @@ describe GeoEngineer::Resources::AwsKmsKey do
         :describe_key,
         {
           key_metadata: {
-            key_id: key_id,
+            key_id:,
             description: key_geo_id
           }
         }

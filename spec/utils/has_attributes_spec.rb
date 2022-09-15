@@ -4,7 +4,8 @@ describe("HasAttributes") do
   class WithAttributes
     include HasAttributes
     attr_reader :block_handled
-    def assign_block(name, *args, &block)
+
+    def assign_block(name, *args, &)
       @block_handled = name
     end
   end

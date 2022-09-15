@@ -17,11 +17,11 @@ class GeoEngineer::GPS::GraphUtils
 
     potential_modified_keys = old_keys - removed
     potential_modified_keys.each do |key|
-      to_return += [{ action: '~', key: key, value: new[key] }] unless new[key] == old[key]
+      to_return += [{ action: '~', key:, value: new[key] }] unless new[key] == old[key]
     end
 
-    to_return += removed.map { |key| { action: '-', key: key, value: old[key] } }
-    to_return += added.map { |key| { action: '+', key: key, value: new[key] } }
+    to_return += removed.map { |key| { action: '-', key:, value: old[key] } }
+    to_return += added.map { |key| { action: '+', key:, value: new[key] } }
   end
 
   # This flattens the environment into a hash where keys are dot delimited keys up to the

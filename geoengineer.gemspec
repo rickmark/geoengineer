@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
     to codeify then plan and execute changes to cloud resources using Hashicorp Terraform.
   EOF
   s.homepage    = "https://coinbase.github.io/geoengineer"
-  s.authors     = ['coinbase']
+  s.authors     = ['coinbase', 'rickmark']
   s.email       = ['graham.jenson@coinbase.com']
   s.license     = 'Apache-2.0'
 
@@ -20,22 +20,23 @@ Gem::Specification.new do |s|
   s.test_files = Dir.glob('spec/**/*.rb')
   s.executables << 'geo'
 
-  s.required_ruby_version = '>= 2.5'
-  s.add_development_dependency "rspec", '~> 3.4'
-  s.add_development_dependency "rake", '~> 10.4'
-  s.add_development_dependency "yard", '~> 0.9'
-  s.add_development_dependency "pry-byebug", '~> 3.4'
+  s.required_ruby_version = '>= 3.1'
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "yard"
+  s.add_development_dependency "pry-byebug"
+  s.add_development_dependency 'sorbet'
 
-  s.add_dependency 'netaddr',           '~> 2.0.4'
-  s.add_dependency 'aws-sdk',           '~> 3'
-  s.add_dependency 'commander',         '~> 4.4'
-  s.add_dependency 'colorize',          '~> 0.7'
-  s.add_dependency 'parallel',          '~> 1.10'
-  s.add_dependency 'octokit',           '~> 4.14'
-  # We are temporarily adding this dependency because there is an
-  # incompatibility between octokit and faraday on the latest version.
-  s.add_dependency 'faraday',           '~> 0.15.4'
-  s.add_dependency 'json-schema',       '~> 2.8.1'
-  s.add_dependency 'tty-pager',         '~> 0.12.0'
-  s.add_dependency 'pg',                '~> 0.18.4'
+  s.add_dependency 'netaddr'
+  s.add_dependency 'aws-sdk'
+  s.add_dependency 'commander'
+  s.add_dependency 'colorize'
+  s.add_dependency 'parallel'
+  s.add_dependency 'octokit'
+  s.add_dependency 'azure_sdk'
+  s.add_dependency 'sorbet-runtime'
+  s.add_dependency 'faraday'
+  s.add_dependency 'json-schema'
+  s.add_dependency 'tty-pager'
+  s.add_dependency 'pg'
 end

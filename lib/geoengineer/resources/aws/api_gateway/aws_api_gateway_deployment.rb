@@ -52,7 +52,7 @@ class GeoEngineer::Resources::AwsApiGatewayDeployment < GeoEngineer::Resource
 
   def self._fetch_remote_resources(provider)
     _fetch_remote_rest_apis(provider).map do |rr|
-      _fetch_deployments(provider, rr) .map do |deployment|
+      _fetch_deployments(provider, rr).map do |deployment|
         stage_name = _fetch_stage_name(provider, rr, deployment)
         next unless stage_name
         deployment[:_terraform_id] = deployment[:id]

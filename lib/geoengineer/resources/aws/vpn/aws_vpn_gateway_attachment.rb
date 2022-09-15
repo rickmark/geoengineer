@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsVpnGatewayAttachment < GeoEngineer::Resource
   validate -> { validate_required_attributes([:vpc_id, :vpn_gateway_id]) }
 
   after :initialize, -> {
-    _terraform_id -> { "vpn-attachment-#{Crc32.hashcode(vpc_id + '-' + vpn_gateway_id)}" }
+    _terraform_id -> { "vpn-attachment-#{Crc32.hashcode("#{vpc_id}-#{vpn_gateway_id}")}" }
   }
   after :initialize, -> { _geo_id -> { "#{vpc_id}::#{vpn_gateway_id}" } }
 
@@ -43,7 +43,7 @@ class GeoEngineer::Resources::AwsVpnGatewayAttachment < GeoEngineer::Resource
       _terraform_id: terraform_id,
       _geo_id: "#{vpc_id}::#{gateway[:vpn_gateway_id]}",
       vpn_gateway_id: gateway[:vpn_gateway_id],
-      vpc_id: vpc_id
+      vpc_id:
     }
   end
 end

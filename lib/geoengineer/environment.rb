@@ -16,8 +16,7 @@ class GeoEngineer::Environment
   include HasValidations
   include HasLifecycle
 
-  attr_reader :name
-  attr_reader :remote_state_supported
+  attr_reader :name, :remote_state_supported
 
   # Validate resources have unique attributes
   validate -> {
@@ -52,19 +51,19 @@ class GeoEngineer::Environment
 
   before :validation, -> { self.region ||= ENV['AWS_REGION'] if ENV['AWS_REGION'] }
 
-  def initialize(name, remote_state = false, &block)
+  def initialize(name, remote_state = false, &)
     @name = name
     @outputs = []
     @providers = []
     @backends = []
     @remote_state_supported = remote_state
     self.send("#{name}?=", true) # e.g. staging?
-    instance_exec(self, &block) if block_given?
+    instance_exec(self, &) if block_given?
     execute_lifecycle(:after, :initialize)
   end
 
-  def project(org, name, &block)
-    project = create_project(org, name, &block)
+  def project(org, name, &)
+    project = create_project(org, name, &)
     supported_environments = [project.environments].flatten
     # do not add the project if the project is not supported by this environment
     return NullObject.new unless supported_environments.include?(@name)
@@ -72,16 +71,16 @@ class GeoEngineer::Environment
     project
   end
 
-  def resource(type, id, &block)
+  def resource(type, id, &)
     return find_resource(type, id) unless block_given?
 
-    resource = create_resource(type, id, &block)
+    resource = create_resource(type, id, &)
     resource.environment = self
     resource
   end
 
-  def provider(id, &block)
-    provider = GeoEngineer::Provider.new(id, &block)
+  def provider(id, &)
+    provider = GeoEngineer::Provider.new(id, &)
     @providers << provider
     provider
   end
@@ -90,8 +89,8 @@ class GeoEngineer::Environment
     @providers.find { |p| p.terraform_id == id_alias }
   end
 
-  def backend(id, &block)
-    backend = GeoEngineer::Backend.new(id, &block)
+  def backend(id, &)
+    backend = GeoEngineer::Backend.new(id, &)
     @backends << backend
     backend
   end
@@ -100,8 +99,8 @@ class GeoEngineer::Environment
     @backends.find { |p| p.terraform_id == id_alias }
   end
 
-  def output(id, value, &block)
-    output = GeoEngineer::Output.new(id, value, &block)
+  def output(id, value, &)
+    output = GeoEngineer::Output.new(id, value, &)
     @outputs << output
     output
   end

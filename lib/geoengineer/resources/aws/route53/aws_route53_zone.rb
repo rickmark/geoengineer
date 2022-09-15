@@ -4,6 +4,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/route53_zone.html Terraform Docs}
 ########################################################################
 class GeoEngineer::Resources::AwsRoute53Zone < GeoEngineer::Resource
+  handles_abstract_resource :dns_zone, for: :aws
   validate -> { validate_required_attributes([:name]) }
 
   after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }

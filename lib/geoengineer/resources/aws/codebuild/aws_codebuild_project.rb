@@ -25,8 +25,8 @@ class GeoEngineer::Resources::AwsCodebuildProject < GeoEngineer::Resource
   after :initialize, -> { _terraform_id -> { self[:name] } }
   after :initialize, -> { _geo_id       -> { self[:name] } }
 
-  def _environment(&block)
-    self.send(:[]=, :environment, nil, &block)
+  def _environment(&)
+    self.send(:[]=, :environment, nil, &)
   end
 
   def self._fetch_remote_resources(provider)

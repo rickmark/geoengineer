@@ -8,32 +8,22 @@ module GeoCLI::TerraformCommands
     write_gps if @gps
 
     # create terraform file
-    File.open("#{@tmpdir}/#{@terraform_file}", 'w') { |file|
-      file.write(JSON.pretty_generate(@environment.to_terraform_json()))
-    }
+    File.write("#{@tmpdir}/#{@terraform_file}", JSON.pretty_generate(@environment.to_terraform_json()))
 
     # create terrafrom state if remote state is not supported
     write_state if with_state && !@environment.remote_state_supported?
   end
 
   def write_state
-    File.open("#{@tmpdir}/#{@terraform_state_file}", 'w') { |file|
-      file.write(JSON.pretty_generate(@environment.to_terraform_state()))
-    }
+    File.write("#{@tmpdir}/#{@terraform_state_file}", JSON.pretty_generate(@environment.to_terraform_state()))
   end
 
   def write_gps
-    File.open("#{@tmpdir}/gps.yml", 'w') { |file|
-      file.write(gps.to_h.to_yaml)
-    }
+    File.write("#{@tmpdir}/gps.yml", gps.to_h.to_yaml)
 
-    File.open("#{@tmpdir}/gps.expand.yml", 'w') { |file|
-      file.write(gps.expanded_hash.to_yaml)
-    }
+    File.write("#{@tmpdir}/gps.expand.yml", gps.expanded_hash.to_yaml)
 
-    File.open("#{@tmpdir}/gps.constants.yml", 'w') { |file|
-      file.write(gps.constants.to_h.to_yaml)
-    }
+    File.write("#{@tmpdir}/gps.constants.yml", gps.constants.to_h.to_yaml)
   end
 
   def terraform_parallelism

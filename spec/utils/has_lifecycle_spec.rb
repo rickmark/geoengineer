@@ -5,6 +5,7 @@ describe("HasLifecycle") do
     class Life
       include HasLifecycle
       attr_reader :called_count
+
       after :initialize, -> { @called_count += 1 }
       def initialize
         @called_count = 0

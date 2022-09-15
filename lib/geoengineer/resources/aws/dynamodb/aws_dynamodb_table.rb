@@ -19,8 +19,8 @@ class GeoEngineer::Resources::AwsDynamodbTable < GeoEngineer::Resource
     tfstate[:primary][:attributes] = {
       "ttl.#" => "1",
       # random number determined by fair dice roll, used to flatten list to hash
-      "ttl.0000000006.attribute_name": ttl.attribute_name.to_s,
-      "ttl.0000000006.enabled": ttl.enabled.to_s
+      'ttl.0000000006.attribute_name': ttl.attribute_name.to_s,
+      'ttl.0000000006.enabled': ttl.enabled.to_s
     }
     tfstate
   end
@@ -28,7 +28,7 @@ class GeoEngineer::Resources::AwsDynamodbTable < GeoEngineer::Resource
   def self._fetch_remote_resources(provider)
     AwsClients.dynamo(provider).list_tables['table_names'].map { |name|
       {
-        name: name,
+        name:,
         _geo_id: name,
         _terraform_id: name
       }

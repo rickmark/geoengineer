@@ -28,7 +28,7 @@ describe GeoEngineer::Resources::AwsCloudfrontOriginAccessIdentity do
                       distribution_list: {
                         items: [
                           {
-                            id: id,
+                            id:,
                             comment: 'some-cloudfront-distribution'
                           }
                         ],

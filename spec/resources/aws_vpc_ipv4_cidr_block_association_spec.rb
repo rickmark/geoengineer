@@ -8,18 +8,18 @@ describe(GeoEngineer::Resources::AwsVpcIpv4CidrBlockAssociation) do
       ["10.100.0.0/24", "10.150.0.0/13", "should not allow a cidr range bigger than /16"],
       ["10.100.0.0/24", "10.150.0.0/29", "should not allow a cidr range smaller than /28"],
       ["10.100.0.0/24", "10.100.0.0/25", "should not allow a cidr to overlap the primary vpc range"],
-      ["10.0.0.0/20", "10.0.0.0/17", "should not allow a cidr in 10.0.0.0/16 if the primary vpc range "\
-        "is in 10.0.0.0/15"],
-      ["172.16.0.0/14", "172.31.0.0/18", "should not allow a cidr in 172.31.0.0/16 if the primary vpc "\
-        "range is in 172.16.0.0/12"],
-      ["10.0.0.0/20", "172.31.0.0/18", "should not allow a cidr from a different restricted ranges than "\
-        "the range the VPC is in"],
-      ["172.17.0.0/24", "192.168.0.0/24", "should not allow a cidr from a different restricted range ranges "\
-        "than the range the VPC is in"],
-      ["192.168.0.0/16", "172.31.0.0/18", "should not allow a cidr from a different restricted range than "\
-        "the range the VPC is in"],
-      ["198.19.0.0/16", "172.31.0.0/18", "should not allow a cidr from a different restricted range than "\
-        "the range the VPC is in"]
+      ["10.0.0.0/20", "10.0.0.0/17", "should not allow a cidr in 10.0.0.0/16 if the primary vpc range " \
+                                     "is in 10.0.0.0/15"],
+      ["172.16.0.0/14", "172.31.0.0/18", "should not allow a cidr in 172.31.0.0/16 if the primary vpc " \
+                                         "range is in 172.16.0.0/12"],
+      ["10.0.0.0/20", "172.31.0.0/18", "should not allow a cidr from a different restricted ranges than " \
+                                       "the range the VPC is in"],
+      ["172.17.0.0/24", "192.168.0.0/24", "should not allow a cidr from a different restricted range ranges " \
+                                          "than the range the VPC is in"],
+      ["192.168.0.0/16", "172.31.0.0/18", "should not allow a cidr from a different restricted range than " \
+                                          "the range the VPC is in"],
+      ["198.19.0.0/16", "172.31.0.0/18", "should not allow a cidr from a different restricted range than " \
+                                         "the range the VPC is in"]
     ].each do |test|
       it test[2] do
         res = GeoEngineer::Resources::AwsVpcIpv4CidrBlockAssociation.allocate()

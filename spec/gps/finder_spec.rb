@@ -184,7 +184,7 @@ describe GeoEngineer::GPS::Finder do
     let(:nodes) { [n1, n2, n3, n4] }
     let(:constants) {
       GeoEngineer::GPS::Constants.new({
-                                        "e1": { "override": "no" }, "_global": { "test": "hello", "override": "yes" }
+                                        e1: { override: "no" }, _global: { test: "hello", override: "yes" }
                                       }) }
     let(:context) { { project: "p1", environment: "e1", configuration: "c1", node_type: "test_node" } }
     let(:finder) { described_class.new(nodes, constants, context) }

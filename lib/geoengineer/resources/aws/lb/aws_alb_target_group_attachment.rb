@@ -53,13 +53,11 @@ class GeoEngineer::Resources::AwsAlbTargetGroupAttachment < GeoEngineer::Resourc
 
     return {} unless target
 
-    response = {
+    {
       _terraform_id: "#{arn}/#{target_id}",
       _geo_id: "#{arn}:#{target_id}",
       target_group_arn: arn,
-      target_id: target_id
+      target_id:
     }
-
-    response
   end
 end

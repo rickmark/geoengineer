@@ -16,6 +16,7 @@ class GeoEngineer::Resources::AwsApiGatewayRestApi < GeoEngineer::Resource
 
   # API Resource Methods
   attr_accessor :api_resources
+
   after :initialize, :initialize_children_resources
 
   def initialize_children_resources

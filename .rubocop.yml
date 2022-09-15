@@ -1,6 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  NewCops: enable
   Exclude:
     - 'vendor/**/*'
     - 'examples/*'
@@ -50,9 +51,6 @@ Metrics/AbcSize:
 Style/Lambda:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  EnforcedStyle: braces
-
 Style/RedundantSelf:
   Enabled: false
 
@@ -77,9 +75,6 @@ Style/DoubleNegation:
   Enabled: false
 
 Style/SymbolArray:
-  Enabled: false
-
-Style/MethodMissingSuper:
   Enabled: false
 
 Style/MissingRespondToMissing:

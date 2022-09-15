@@ -4,7 +4,7 @@
 #
 ########################################################################
 class NullObject
-  def method_missing(name, *args, &block)
+  def method_missing(name, *args, &)
     nil
   end
 

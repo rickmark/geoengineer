@@ -14,7 +14,7 @@ describe GeoEngineer::Resources::AwsCloudwatchMetricAlarm do
         :describe_alarms,
         {
           metric_alarms: [
-            { alarm_name: alarm_name },
+            { alarm_name: },
             { alarm_name: 'another-alarm-name' }
           ]
         }

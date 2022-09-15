@@ -12,8 +12,7 @@ class GeoEngineer::GPS::Node
     false
   end
 
-  attr_reader :project, :environment, :configuration, :node_name, :attributes
-  attr_reader :initial_attributes, :depends_on
+  attr_reader :project, :environment, :configuration, :node_name, :attributes, :initial_attributes, :depends_on
 
   attr_accessor :all_nodes, :node_type, :constants
 
@@ -66,12 +65,12 @@ class GeoEngineer::GPS::Node
   def set_values(nodes, constants)
     self.all_nodes = nodes
     self.constants = constants
-    GeoEngineer::GPS::YamlTag.add_tag_context(self.attributes, { nodes: nodes, constants: constants, context: {
-                                                project: project,
-                                                environment: environment,
-                                                configuration: configuration,
-                                                node_type: node_type,
-                                                node_name: node_name
+    GeoEngineer::GPS::YamlTag.add_tag_context(self.attributes, { nodes:, constants:, context: {
+                                                project:,
+                                                environment:,
+                                                configuration:,
+                                                node_type:,
+                                                node_name:
                                               } })
 
     @depends_on += references
@@ -183,7 +182,7 @@ class GeoEngineer::GPS::Node
   def json_file(path, binding_obj = nil)
     raise "file #{path} not found" unless File.file?(path)
 
-    raw = File.open(path, "rb").read
+    raw = File.binread(path)
     interpolated = ERB.new(raw).result(binding_obj).to_s
 
     # normalized output
@@ -218,8 +217,8 @@ class GeoEngineer::GPS::Node
     qp = "[a-zA-Z0-9\\-_\\/\\*]*"
 
     {
-      "type": "string",
-      "pattern": "^(#{qp}):(#{qp}):(#{qp}):#{node_type}:(#{qp})$"
+      type: "string",
+      pattern: "^(#{qp}):(#{qp}):(#{qp}):#{node_type}:(#{qp})$"
     }
   end
 

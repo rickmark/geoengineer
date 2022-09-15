@@ -1,7 +1,8 @@
-require 'rspec'
+require 'bundler'
+Bundler.setup
 require_relative '../lib/geoengineer'
 
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # https://ruby.awsblog.com/post/Tx2SU6TYJWQQLC3/Stubbing-AWS-Responses
 AwsClients.stub!

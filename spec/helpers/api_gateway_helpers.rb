@@ -3,7 +3,7 @@ require 'securerandom'
 def create_api_gateway_rest_api(name)
   {
     id: SecureRandom.hex,
-    name: name
+    name:
   }
 end
 
@@ -11,30 +11,30 @@ def create_api_gateway_resource(rest_api_id, path)
   {
     id: SecureRandom.hex,
     parent_id: rest_api_id,
-    path: path
+    path:
   }
 end
 
 def create_api_gateway_model(name, content_type: 'application/json')
   {
     id: SecureRandom.hex,
-    name: name,
+    name:,
     description: "Model #{SecureRandom.hex}",
     schema: "{}",
-    content_type: content_type
+    content_type:
   }
 end
 
 def create_api_gateway_request_validator(name)
   {
     id: SecureRandom.hex,
-    name: name
+    name:
   }
 end
 
 def create_api_gateway_gateway_response(response_type, status_code: 400)
   {
-    response_type: response_type,
+    response_type:,
     status_code: status_code.to_s
   }
 end
@@ -71,6 +71,6 @@ end
 def create_api_gateway_authorizer(name)
   {
     id: SecureRandom.hex,
-    name: name
+    name:
   }
 end

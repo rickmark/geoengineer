@@ -4,7 +4,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/route53_record.html Terraform Docs}
 ########################################################################
 
-# Note: Currently, 'name' must be the fully qualified domain name.
+# NOTE: Currently, 'name' must be the fully qualified domain name.
 class GeoEngineer::Resources::AwsRoute53Record < GeoEngineer::Resource
   validate -> { validate_required_attributes([:zone_id, :name, :type]) }
   validate -> { validate_required_attributes([:ttl, :records]) unless self.alias }

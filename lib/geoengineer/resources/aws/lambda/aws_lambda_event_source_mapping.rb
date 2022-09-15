@@ -30,8 +30,7 @@ class GeoEngineer::Resources::AwsLambdaEventSourceMapping < GeoEngineer::Resourc
   end
 
   def self._fetch_remote_resources(provider)
-    AwsClients
-      .lambda(provider)
+    provider
       .list_event_source_mappings['event_source_mappings']
       .map(&:to_h)
       .map do |event|

@@ -21,7 +21,7 @@ class GeoEngineer::Resources::AwsKinesisStream < GeoEngineer::Resource
 
   def self._stream_description(provider, stream_name)
     AwsClients.kinesis(provider)
-              .describe_stream({ stream_name: stream_name })
+              .describe_stream({ stream_name: })
               .stream_description
               .to_h
   end

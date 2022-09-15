@@ -63,7 +63,7 @@ class GeoEngineer::Resources::AwsIamPolicy < GeoEngineer::Resource
 
   def _get_policy_document(arn, version_id)
     response = AwsClients.iam.get_policy_version({ policy_arn: arn,
-                                                   version_id: version_id })
+                                                   version_id: })
     URI.decode(response.policy_version.document)
   end
 

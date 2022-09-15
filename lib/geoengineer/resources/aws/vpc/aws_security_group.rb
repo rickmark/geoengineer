@@ -17,7 +17,7 @@ class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
     all_ingress.map do |i|
       if i.protocol.to_s == '-1' && !(i.to_port.to_s == '0' && i.from_port.to_s == '0')
         'Cannot specify protocol of -1 with a port number other than 0 ' \
-        "(to_port = #{i.to_port} from_port = #{i.from_port})"
+          "(to_port = #{i.to_port} from_port = #{i.from_port})"
       end
     end
   }
@@ -33,8 +33,8 @@ class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
     tfstate = super
 
     egress_ingress = {
-      "egress.#": all_egress.length.to_s,
-      "ingress.#": all_ingress.length.to_s
+      'egress.#': all_egress.length.to_s,
+      'ingress.#': all_ingress.length.to_s
     }
 
     c = 0
@@ -115,7 +115,7 @@ class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
 
       if src_count.zero?
         errors << 'Security group ingress rules must specify at least one source ' \
-        '(cidr_blocks, ipv6_cidr_blocks, prefix_list_ids, security_groups, or self)'
+                  '(cidr_blocks, ipv6_cidr_blocks, prefix_list_ids, security_groups, or self)'
       end
     end
 
@@ -129,7 +129,7 @@ class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
 
       if dst_count.zero?
         errors << 'Security group egress rules must specify at least one destination ' \
-        '(cidr_blocks, ipv6_cidr_blocks, prefix_list_ids, security_groups, or self)'
+                  '(cidr_blocks, ipv6_cidr_blocks, prefix_list_ids, security_groups, or self)'
       end
     end
 

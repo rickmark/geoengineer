@@ -17,11 +17,11 @@ module HasTemplates
     throw "undefined template '#{type}' for '#{clazz_name}' or '#{module_clazz}'"
   end
 
-  def from_template(type, name, parameters = {}, &block)
+  def from_template(type, name, parameters = {}, &)
     throw "Template '#{name}' already defined" if templates[name]
     clazz = find_template(type)
     template = clazz.new(name, self, parameters)
-    template.instance_exec(*template.template_resources, &block) if block_given?
+    template.instance_exec(*template.template_resources, &) if block_given?
     # Need to double check this for templates that create templates
     throw "Template '#{name}' already defined" if templates[name]
     templates[name] = template

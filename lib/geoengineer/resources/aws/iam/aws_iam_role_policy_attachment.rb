@@ -38,7 +38,7 @@ class GeoEngineer::Resources::AwsIamRolePolicyAttachment < GeoEngineer::Resource
 
     roles = []
 
-    response = AwsClients.iam(provider).list_entities_for_policy({ policy_arn: policy_arn })
+    response = AwsClients.iam(provider).list_entities_for_policy({ policy_arn: })
     roles += response.policy_roles
     while response.next_page?
       response = response.next_page
@@ -63,7 +63,7 @@ class GeoEngineer::Resources::AwsIamRolePolicyAttachment < GeoEngineer::Resource
   def determine_policy_arn
     if policy_arn && !_policy
       # check if the policy ARN is likely a Terraform reference, if so we can't fetch it so return nil
-      return /^\${[a-zA-Z0-9\._-]+}$/.match?(policy_arn) ? nil : policy_arn
+      return /^\${[a-zA-Z0-9._-]+}$/.match?(policy_arn) ? nil : policy_arn
     end
 
     return nil unless _policy

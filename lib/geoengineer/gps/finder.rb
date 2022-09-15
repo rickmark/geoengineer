@@ -37,13 +37,12 @@ class GeoEngineer::GPS::Finder
     (?<configuration>[a-zA-Z0-9\-_*]*):    # Match the configuration (optional)
     (?<node_type>[a-zA-Z0-9\-_]+):         # Match the node_type (required), does not support `*`
     (?<node_name>[a-zA-Z0-9\-_/*.]+)       # Match the node_name (required)
-    [#](?<resource>[a-zA-Z0-9_]+)          # Match the node resource (required)
+    \#(?<resource>[a-zA-Z0-9_]+)          # Match the node resource (required)
     ([.](?<attribute>[a-zA-Z0-9_]+))?      # Match the resource attribute, requires resource (optional)
     $
   }x
 
-  attr_reader :nodes, :constants
-  attr_reader :project, :environment, :configuration, :node_type, :node_name
+  attr_reader :nodes, :constants, :project, :environment, :configuration, :node_type, :node_name
 
   def self.build_nodes_lookup_hash(nodes_list)
     nodes_id_hash = {}
@@ -86,7 +85,7 @@ class GeoEngineer::GPS::Finder
   end
 
   def dereference!(reference, auto_load: true)
-    refs = dereference(reference, { auto_load: auto_load })
+    refs = dereference(reference, { auto_load: })
     raise NotFoundError, "for reference #{reference}" if refs.empty?
     raise NotUniqueError, "for reference #{reference}" if refs.length > 1
     refs.first
@@ -97,7 +96,7 @@ class GeoEngineer::GPS::Finder
     constants_components = reference.match(CONSTANT_REFERENCE_SYNTAX)
     context_components = reference.match(CONTEXT_REFERENCE_SYNTAX)
 
-    return node_dereference(reference, nodes_components, { auto_load: auto_load }) if nodes_components
+    return node_dereference(reference, nodes_components, { auto_load: }) if nodes_components
     return constants_dereference(reference, constants_components) if constants_components
     return context_dereference(reference, context_components) if context_components
 

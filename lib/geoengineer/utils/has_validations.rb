@@ -35,8 +35,7 @@ module HasValidations
       errs << (validation.is_a?(Proc) ? self.instance_exec(&validation) : self.send(validation))
     end
     # remove nils
-    errs = errs.flatten.select { |x| !x.nil? }
-    errs
+    errs.flatten.compact
   end
 
   # Validation Helper Methods

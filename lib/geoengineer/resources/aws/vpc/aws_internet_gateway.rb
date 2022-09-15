@@ -16,7 +16,7 @@ class GeoEngineer::Resources::AwsInternetGateway < GeoEngineer::Resource
       gateway.merge(
         {
           _terraform_id: gateway[:internet_gateway_id],
-          _geo_id: gateway.dig(:attachments)&.find { |a| !a[:vpc_id].nil? }&.dig(:vpc_id)
+          _geo_id: gateway[:attachments]&.find { |a| !a[:vpc_id].nil? }&.dig(:vpc_id)
         }
       )
     end

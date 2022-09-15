@@ -30,14 +30,14 @@ class GeoEngineer::Resources::AwsS3BucketObject < GeoEngineer::Resource
   end
 
   def remote_resource_params
-    resp = AwsClients.s3(provider).get_object({ bucket: bucket, key: key })
+    resp = AwsClients.s3(provider).get_object({ bucket:, key: })
     content = resp.body.read
     content_type = resp.content_type
     {
       _terraform_id: key,
       _geo_id: key,
-      content: content,
-      content_type: content_type
+      content:,
+      content_type:
     }
   rescue Aws::S3::Errors::NoSuchKey
     {

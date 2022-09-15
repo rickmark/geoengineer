@@ -34,7 +34,7 @@ module GeoCLI::GPSCommands
   end
 
   def strip_leading_line(yaml)
-    yaml.split("\n")[1..-1].join("\n")
+    yaml.split("\n")[1..].join("\n")
   end
 
   def validate_query!(query)

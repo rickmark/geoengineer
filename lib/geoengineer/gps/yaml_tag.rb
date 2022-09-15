@@ -4,8 +4,7 @@ require 'yaml'
 class GeoEngineer::GPS::YamlTag
   include Comparable
 
-  attr_reader :nodes, :constants, :context
-  attr_reader :type, :value
+  attr_reader :nodes, :constants, :context, :type, :value
 
   def self.add_tag_context(values, nodes: nil, constants: nil, context: nil)
     HashUtils.map_values(values) do |a|
@@ -25,17 +24,17 @@ class GeoEngineer::GPS::YamlTag
 
   def context=(context)
     raise "Cannot change Tag Context from #{@context} to #{context}" if @context && @context != context
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { context: context }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { context: }) # Recursive for Tags in Tags
     @context = context
   end
 
   def constants=(constants)
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { constants: constants }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { constants: }) # Recursive for Tags in Tags
     @constants = constants
   end
 
   def nodes=(nodes)
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { nodes: nodes }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { nodes: }) # Recursive for Tags in Tags
     @nodes = nodes
   end
 

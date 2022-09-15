@@ -11,10 +11,10 @@ class GeoEngineer::SubResource
 
   attr_reader :_type
 
-  def initialize(resource, type, &block)
+  def initialize(resource, type, &)
     @resource = resource
     @_type = type.to_s
-    instance_exec(self, &block) if block_given?
+    instance_exec(self, &) if block_given?
   end
 
   def _terraform_id

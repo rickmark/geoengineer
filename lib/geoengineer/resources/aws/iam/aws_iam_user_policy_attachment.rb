@@ -37,7 +37,7 @@ class GeoEngineer::Resources::AwsIamUserPolicyAttachment < GeoEngineer::Resource
 
     users = []
 
-    response = AwsClients.iam(provider).list_entities_for_policy({ policy_arn: policy_arn })
+    response = AwsClients.iam(provider).list_entities_for_policy({ policy_arn: })
     users += response.policy_users
     while response.next_page?
       response = response.next_page

@@ -19,12 +19,12 @@ class HashUtils
     JSON.parse(object.to_json)
   end
 
-  def self.map_values(value, &block)
+  def self.map_values(value, &)
     case value
     when Hash
-      value.each_pair { |k, v| value[k] = map_values(v, &block) }
+      value.each_pair { |k, v| value[k] = map_values(v, &) }
     when Array
-      value.map { |v| map_values(v, &block) }
+      value.map { |v| map_values(v, &) }
     else
       yield value
     end

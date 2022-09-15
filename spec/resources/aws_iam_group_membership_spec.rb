@@ -32,7 +32,7 @@ describe GeoEngineer::Resources::AwsIamGroupMembership do
   before do
     aws_client.stub_responses(
       :list_groups, {
-        'groups': [
+        groups: [
           {
             group_name: 'fake-iam-group',
             path: '/',
@@ -46,14 +46,14 @@ describe GeoEngineer::Resources::AwsIamGroupMembership do
 
     aws_client.stub_responses(
       :get_group, {
-        'group': {
+        group: {
           group_name: 'fake-iam-group',
           path: '/',
           arn: 'arn:aws:iam::aws:iam-group/xyv/FakeAwsARN',
           create_date: Time.parse("2016-12-13 11:54:59 -0800"),
           group_id: '12345'
         },
-        'users': [
+        users: [
           {
             path: '/',
             user_name: 'fake-iam-user',
