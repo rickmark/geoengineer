@@ -110,8 +110,8 @@ describe GeoEngineer::Environment do
       }
 
       expect(p0.class).to eq GeoEngineer::Project
-      expect(p1.class).to eq NullObject
-      expect(p2.class).to eq NullObject
+      expect(p1).to be_nil
+      expect(p2).to be_nil
     end
   end
 
@@ -127,7 +127,7 @@ describe GeoEngineer::Environment do
       p1 = env.project("org", "1") {
         environments 'nottest'
       }
-      p1.resource('type', 'id2') { x 2 }
+      p1&.resource('type', 'id2') { x 2 }
 
       expect(env.all_resources.length).to eq 2
     end

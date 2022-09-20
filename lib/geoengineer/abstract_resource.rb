@@ -1,3 +1,5 @@
-class GeoEngineer::AbstractResource
-  def self.abstract_name(name); end
+module GeoEngineer
+  class AbstractResource
+    def self.abstract_name(name); end
+  end
 end

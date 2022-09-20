@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsDbParameterGroup < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name, :family, :description]) }
   validate -> { validate_subresource_required_attributes(:parameter, [:name, :value]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def short_type

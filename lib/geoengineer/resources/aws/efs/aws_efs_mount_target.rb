@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsEfsMountTarget < GeoEngineer::Resource
   validate -> { validate_required_attributes([:file_system_id, :subnet_id]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{file_system_id}::#{subnet_id}" } }
 
   def support_tags?

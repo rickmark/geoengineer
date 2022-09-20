@@ -1,5 +1,7 @@
+# typed: true
 # Finder is a class that contains all the logic to find a GPS coordinate
 class GeoEngineer::GPS::Finder
+  extend T::Sig
   class NotFoundError < StandardError; end
   class NotUniqueError < StandardError; end
   class BadQueryError < StandardError; end
@@ -85,7 +87,7 @@ class GeoEngineer::GPS::Finder
   end
 
   def dereference!(reference, auto_load: true)
-    refs = dereference(reference, { auto_load: })
+    refs = dereference(reference, auto_load: auto_load)
     raise NotFoundError, "for reference #{reference}" if refs.empty?
     raise NotUniqueError, "for reference #{reference}" if refs.length > 1
     refs.first
@@ -96,7 +98,7 @@ class GeoEngineer::GPS::Finder
     constants_components = reference.match(CONSTANT_REFERENCE_SYNTAX)
     context_components = reference.match(CONTEXT_REFERENCE_SYNTAX)
 
-    return node_dereference(reference, nodes_components, { auto_load: }) if nodes_components
+    return node_dereference(reference, nodes_components, auto_load: auto_load) if nodes_components
     return constants_dereference(reference, constants_components) if constants_components
     return context_dereference(reference, context_components) if context_components
 

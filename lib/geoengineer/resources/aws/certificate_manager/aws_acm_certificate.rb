@@ -9,8 +9,8 @@
 # {https://www.terraform.io/docs/providers/aws/r/acmpca_certificate_authority.html}
 ########################################################################
 class GeoEngineer::Resources::AwsAcmCertificate < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   validate -> { validate_required_attributes([:domain_name]) }
   ## Note: The certificate_authority_arn is a required attribute which implies

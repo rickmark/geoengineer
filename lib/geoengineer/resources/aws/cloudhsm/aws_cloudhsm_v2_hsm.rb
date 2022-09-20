@@ -9,7 +9,7 @@ class GeoEngineer::Resources::AwsCloudhsmV2Hsm < GeoEngineer::Resource
 
   after :initialize, -> { cluster_id -> { self._cluster.to_ref(:id) if self._cluster } }
   after :initialize, -> { _cluster_name -> { self._cluster.tags[:Name] if self._cluster } }
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{self._cluster_name || self.cluster_id}_#{self.subnet_id}" } }
 
   def self._fetch_remote_resources(provider)

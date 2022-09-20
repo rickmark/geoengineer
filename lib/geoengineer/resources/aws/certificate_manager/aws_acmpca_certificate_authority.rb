@@ -5,7 +5,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/acmpca_certificate_authority.html}
 ########################################################################
 class GeoEngineer::Resources::AwsAcmpcaCertificateAuthority < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
 
   validate -> { validate_required_attributes([:type]) }
   validate -> { validate_required_attributes([:certificate_authority_configuration]) }
@@ -17,7 +17,7 @@ class GeoEngineer::Resources::AwsAcmpcaCertificateAuthority < GeoEngineer::Resou
        self.certificate_authority_configuration.first[:subject].first
       return self.certificate_authority_configuration.first[:subject].first[:common_name]
     end
-    NullObject.new
+    nil
   end
 
   def self._fetch_remote_resources(provider)

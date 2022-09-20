@@ -26,8 +26,8 @@ class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
   before :validation, -> { flatten_cidr_and_sg_blocks }
   before :validation, -> { uniq_cidr_and_sg_blocks }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id       -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id       -> { tags&.dig(:Name) } }
 
   def to_terraform_state
     tfstate = super

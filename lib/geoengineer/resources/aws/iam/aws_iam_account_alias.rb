@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsIamAccountAlias < GeoEngineer::Resource
   validate -> { validate_required_attributes([:account_alias]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { account_alias.to_s } }
 
   def support_tags?

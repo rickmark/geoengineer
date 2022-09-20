@@ -1,19 +1,21 @@
+# typed: true
 # Constants contains a hash that can store sharable values
 class GeoEngineer::GPS::Constants
+  extend T::Sig
   attr_reader :constants
 
   def initialize(constants)
     @constants = constants
 
     # the local environment overrides the default values
-    constants.each_pair do |environment, vals|
+    constants.each_pair do |environment, _vals|
       # "name" is always the full name of the environment
       constants[environment]["name"] = environment.to_s
     end
 
     # attach constants and environment to YamlTags
     constants.each_pair do |environment, vals|
-      GeoEngineer::GPS::YamlTag.add_tag_context(vals, { constants: self, context: { environment: } })
+      GeoEngineer::GPS::YamlTag.add_tag_context vals, constants: self, context: { environment: environment }
     end
 
     @constants = HashUtils.json_dup(@constants)
@@ -40,6 +42,7 @@ class GeoEngineer::GPS::Constants
     nil
   end
 
+  sig { returns(Hash) }
   def to_h
     HashUtils.json_dup(constants)
   end

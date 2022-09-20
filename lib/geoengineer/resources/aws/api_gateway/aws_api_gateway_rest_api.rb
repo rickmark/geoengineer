@@ -11,7 +11,7 @@ class GeoEngineer::Resources::AwsApiGatewayRestApi < GeoEngineer::Resource
   # Validations
   validate -> { validate_required_attributes([:name]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   # API Resource Methods
@@ -57,7 +57,7 @@ class GeoEngineer::Resources::AwsApiGatewayRestApi < GeoEngineer::Resource
   end
 
   def root_resource_id
-    NullObject.maybe(remote_resource).root_resource_id
+    remote_resource&.root_resource_id
   end
 
   def _policy_file(path, binding_obj = nil)

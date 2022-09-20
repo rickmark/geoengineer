@@ -6,7 +6,7 @@
 ########################################################################
 class GeoEngineer::Resources::AwsKinesisFirehoseDeliveryStream < GeoEngineer::Resource
   after :initialize, -> {
-    _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id }
+    _terraform_id -> { remote_resource&._terraform_id }
   }
   after :initialize, -> {
     _geo_id -> { name }

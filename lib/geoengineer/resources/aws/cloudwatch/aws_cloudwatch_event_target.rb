@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsCloudwatchEventTarget < GeoEngineer::Resource
   validate -> { validate_required_attributes([:rule, :arn, :target_id]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { "#{self.rule}-#{self.target_id}" } }
 
   def to_terraform_state

@@ -27,7 +27,7 @@ class GeoEngineer::Resources::AwsApiGatewayMethod < GeoEngineer::Resource
                                  "#{_rest_api._geo_id}::#{_resource._geo_id}::#{http_method}"
                                } }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
 
   def to_terraform_state
     tfstate = super

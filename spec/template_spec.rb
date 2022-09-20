@@ -27,7 +27,7 @@ describe("GeoEngineer::Template") do
   end
 
   it 'should be extendable' do
-    project = NullObject.new
+    project = nil
     template = CustomTemplate.new("custom_template", project, { res1: "Res1" })
 
     expect(template.res1.name).to eq "Resource1"

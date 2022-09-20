@@ -17,7 +17,7 @@ class GeoEngineer::Resources::AwsSesEventDestination < GeoEngineer::Resource
     validate_subresource_required_attributes(:kinesis_destination, [:stream_arn, :role_arn])
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def support_tags?

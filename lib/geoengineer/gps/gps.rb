@@ -1,18 +1,23 @@
+# typed: true
+
 require 'yaml'
+
 ###
 # GPS Geo Planning System
-# This module is designed as a higher abstration above the "resources" level
-# The abstration is built for engineers to use so is in their vocabulary
+# This module is designed as a higher abstraction above the "resources" level
+# The abstraction is built for engineers to use so is in their vocabulary
 # As each engineering team is different GPS is only building blocks
 # GPS is not a complete solution
 ###
 class GeoEngineer::GPS
+  extend T::Sig
+
   class GPSProjectNotFound < StandardError; end
   class NodeTypeNotFound < StandardError; end
   class MetaNodeError < StandardError; end
   class LoadError < StandardError; end
 
-  GPS_FILE_EXTENSTION = ".gps.yml".freeze
+  GPS_FILE_EXTENSION = ".gps.yml".freeze
 
   def self.json_schema
     node_names = {
@@ -40,6 +45,7 @@ class GeoEngineer::GPS
   end
 
   # Load
+  sig { params(gps_instance: GeoEngineer::GPS, gps_file: String).void }
   def self.load_gps_file(gps_instance, gps_file)
     raise "The file \"#{gps_file}\" does not exist" unless File.exist?(gps_file)
 
@@ -51,29 +57,31 @@ class GeoEngineer::GPS
       # This will create the GPS resources
       require "#{Dir.pwd}/#{partial_file_name}"
     else
-      # otherwise initalize for the partial directly here
+      # otherwise initialize for the partial directly here
       gps_instance.partial_of(partial_file_name)
     end
   end
 
+  sig { params(gps_file: String).void }
   def load_gps_file(gps_file)
     GeoEngineer::GPS.load_gps_file(self, gps_file)
   end
 
   # Parse
+  sig { params(dir: String, schema: T.nilable(Hash)).returns(Hash) }
   def self.parse_dir(dir, schema = nil)
     # Load, expand then merge all yml files
-    Dir["#{dir}**/*#{GPS_FILE_EXTENSTION}"].reduce({}) do |new_hash, gps_file|
+    Dir["#{dir}**/*#{GPS_FILE_EXTENSION}"].reduce({}) do |new_hash, gps_file|
       begin
         # Merge Keys don't work with YAML.safe_load
         # since we are also loading Ruby safe_load is not needed
         gps_hash = YAML.load(File.read(gps_file))
-        # remove all keys starting with `_` to remove paritals
+        # remove all keys starting with `_` to remove partials
         gps_hash = HashUtils.remove_(gps_hash)
         JSON::Validator.validate!(schema, gps_hash) if schema
 
         # base name is the path + file
-        base_name = gps_file.sub(dir, "")[0...-GPS_FILE_EXTENSTION.length]
+        base_name = gps_file.sub(dir, "")[0...-GPS_FILE_EXTENSION.length]
 
         new_hash.merge({ base_name.to_s => gps_hash })
       rescue StandardError => e
@@ -92,6 +100,7 @@ class GeoEngineer::GPS
 
   attr_reader :base_hash, :constants
 
+  sig { params(base_hash: Hash, constants: T.any(GeoEngineer::GPS::Constants, Hash)).void }
   def initialize(base_hash = {}, constants = {})
     # Base Hash is the unedited input, useful for debugging
     @base_hash = base_hash
@@ -159,12 +168,12 @@ class GeoEngineer::GPS
       # exist. This allows _default to be used as a template for cookie cutter
       # definitions.
       if environments.key?("_default")
-        defenv = environments.delete("_default")
+        default_env = environments.delete("_default")
 
         # NOTE: the constants appeared to be the best place to easily get all known environments.
         all_environments = @constants.constants.keys.reject { |env| env.start_with?('_') }
         all_environments.each do |env|
-          environments[env] = HashUtils.deep_dup(defenv) unless environments[env]
+          environments[env] = HashUtils.deep_dup(default_env) unless environments[env]
         end
       end
 
@@ -180,13 +189,8 @@ class GeoEngineer::GPS
     nodes.each_pair do |node_type, node_names|
       node_names.each_pair do |node_name, attributes|
         node_type_class = find_node_class(node_type.to_s)
-        yield node_type_class.new(
-          project.to_s,
-          environment.to_s,
-          configuration.to_s,
-          node_name.to_s,
-          HashUtils.deep_dup(attributes)
-        )
+
+        yield node_type_class.new(project, environment, configuration, node_name, attributes)
       end
     end
   end
@@ -212,11 +216,11 @@ class GeoEngineer::GPS
       next unless node.meta?
 
       built_nodes = expand_meta_node(node, all_nodes)
-      built_nodes.each do |bnode|
+      built_nodes.each do |built_node|
         # Error if the meta-node is overwriting an existing node
-        already_built_error = "\"#{node.node_name}\" overwrites node \"#{bnode.node_name}\""
-        raise MetaNodeError, already_built_error if expanded_nodes.map(&:node_id).include? bnode.node_id
-        expanded_nodes << bnode
+        already_built_error = "\"#{node.node_name}\" overwrites node \"#{built_node.node_name}\""
+        raise MetaNodeError, already_built_error if expanded_nodes.map(&:node_id).include? built_node.node_id
+        expanded_nodes << built_node
       end
     end
 
@@ -242,7 +246,8 @@ class GeoEngineer::GPS
     create_project(org_name, project_name, env, &)
   end
 
-  def create_project(org, name, environment, &)
+  sig { params(org: String, name: String, environment: GeoEngineer::Environment, with: T.nilable(T.proc.void)).returns(GeoEngineer::Project) }
+  def create_project(org, name, environment, &with)
     project_name = "#{org}/#{name}"
     environment_name = environment.name
     project_environments = project_environments(project_name)
@@ -250,14 +255,14 @@ class GeoEngineer::GPS
     raise GPSProjectNotFound, "project not found \"#{project_name}\"" unless project?(project_name)
 
     project = environment.project(org, name) do
-      environments project_environments
+      self.environment = project_environments
     end
 
     project_nodes = where("#{project_name}:#{environment_name}:*:*:*")
     create_all_resource_for_project(project, project_nodes)
 
     project_configurations(project_name, environment_name).each do |configuration|
-      # yeild to the given block nodes per-config
+      # yield to the given block nodes per-config
       nw = GeoEngineer::GPS::NodesContext.new(project_name, environment_name, configuration, nodes, constants)
       yield(project, configuration, nw) if block_given? && project_nodes.any?
     end
@@ -281,13 +286,14 @@ class GeoEngineer::GPS
   end
 
   def project_environments(project)
-    @base_hash[project]&.keys || []
+    @base_hash[project].keys || []
   end
 
   def project_configurations(project, environment)
     @base_hash.dig(project, environment)&.keys || []
   end
 
+  sig { params(type: String).returns(Class) }
   # find node type
   def find_node_class(type)
     clazz_name = type.split('_').collect(&:capitalize).join

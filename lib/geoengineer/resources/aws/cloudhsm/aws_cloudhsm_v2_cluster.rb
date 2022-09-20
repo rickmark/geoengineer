@@ -7,8 +7,8 @@ class GeoEngineer::Resources::AwsCloudhsmV2Cluster < GeoEngineer::Resource
   validate -> { validate_required_attributes([:hsm_type, :subnet_ids]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def to_terraform_state
     tfstate = super

@@ -1,7 +1,10 @@
+# typed: true
+
 require 'yaml'
 
 # YamlTag allows use of Tags in GPS
 class GeoEngineer::GPS::YamlTag
+  extend T::Sig
   include Comparable
 
   attr_reader :nodes, :constants, :context, :type, :value
@@ -9,7 +12,7 @@ class GeoEngineer::GPS::YamlTag
   def self.add_tag_context(values, nodes: nil, constants: nil, context: nil)
     HashUtils.map_values(values) do |a|
       next a unless a.is_a? GeoEngineer::GPS::YamlTag
-      # Only overide values if provided
+      # Only override values if provided
       a.nodes = nodes if nodes
       a.constants = constants if constants
       a.context = context if context
@@ -24,17 +27,17 @@ class GeoEngineer::GPS::YamlTag
 
   def context=(context)
     raise "Cannot change Tag Context from #{@context} to #{context}" if @context && @context != context
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { context: }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, context:) # Recursive for Tags in Tags
     @context = context
   end
 
   def constants=(constants)
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { constants: }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, constants:) # Recursive for Tags in Tags
     @constants = constants
   end
 
   def nodes=(nodes)
-    GeoEngineer::GPS::YamlTag.add_tag_context(@value, { nodes: }) # Recursive for Tags in Tags
+    GeoEngineer::GPS::YamlTag.add_tag_context(@value, nodes:) # Recursive for Tags in Tags
     @nodes = nodes
   end
 
@@ -43,6 +46,7 @@ class GeoEngineer::GPS::YamlTag
     str
   end
 
+  sig { returns(GeoEngineer::GPS::Finder) }
   def finder
     @finder ||= GeoEngineer::GPS::Finder.new(nodes, constants, context || {})
   end
@@ -58,6 +62,7 @@ class GeoEngineer::GPS::YamlTag
     raise NotImplementedError
   end
 
+  sig { returns(String) }
   def tag_name
     "!#{type.split('::')[1]}"
   end
@@ -95,16 +100,19 @@ class GeoEngineer::GPS::YamlTag::Sub < GeoEngineer::GPS::YamlTag
   def to_json(options = nil)
     result_value = value.dup
     all_queries.each do |query|
-      result = finder.dereference!(query, { auto_load: false })
+      result = finder.dereference!(query, auto_load: false)
 
       # Process result differently per type
-      case result
-      when Array
-        result = result.to_json
-      when Hash
-        result = result.to_json
-      end
-      result_value.gsub!(/{{\s*#{query}\s*}}/, result)
+      value = case result
+              when Array
+                result.to_s
+              when Hash
+                result.to_proc
+              else
+                result
+              end
+
+      result_value.gsub!(/{{\s*#{query}\s*}}/, value)
     end
 
     result_value.to_json
@@ -123,7 +131,7 @@ end
 class GeoEngineer::GPS::YamlTag::Ref < GeoEngineer::GPS::YamlTag
   def to_json(options = nil)
     # do not automatically load the nodes referenced
-    finder.dereference!(value, { auto_load: false }).to_json
+    finder.dereference!(value, auto_load: false).to_json
   end
 
   def references
@@ -136,7 +144,7 @@ end
 # !refs class
 class GeoEngineer::GPS::YamlTag::Refs < GeoEngineer::GPS::YamlTag
   def to_json(options = nil)
-    finder.dereference(value, { auto_load: false }).to_json
+    finder.dereference(value, auto_load: false).to_json
   end
 
   def references
@@ -159,10 +167,12 @@ class GeoEngineer::GPS::YamlTag::Flatten < GeoEngineer::GPS::YamlTag
     coder
   end
 
+  sig { params(other: GeoEngineer::GPS::YamlTag).returns(T::Boolean) }
   def ==(other)
     self.to_yaml == other.to_yaml
   end
 
+  sig { params(other: GeoEngineer::GPS::YamlTag).returns(Integer) }
   def <=>(other)
     return 0 unless other.is_a?(self.class) || other.is_a?(Array)
     return 0 if value.size == other.value.size
@@ -170,10 +180,10 @@ class GeoEngineer::GPS::YamlTag::Flatten < GeoEngineer::GPS::YamlTag
   end
 
   def references
-    refs = []
+    refs = T.let([], T::Array[T.untyped])
     value.each do |a|
       next unless a.is_a? GeoEngineer::GPS::YamlTag
-      refs += a.references()
+      refs += a.references
     end
     refs.flatten.uniq
   end

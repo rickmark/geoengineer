@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsNetworkInterface < GeoEngineer::Resource
   validate -> { validate_required_attributes([:subnet_id]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { Array(private_ips).join(',') } }
 
   def self._fetch_remote_resources(provider)

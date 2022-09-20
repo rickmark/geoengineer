@@ -5,7 +5,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/waf_rule.html}
 ########################################################################
 class GeoEngineer::Resources::AwsWafRule < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def self._all_rule_ids(provider)

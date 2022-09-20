@@ -15,7 +15,7 @@ describe GeoEngineer::GPS::Node do
   describe '#depends_on' do
     it 'equals nodes references in yaml_tags' do
       attrs = YAML.load('test: !ref p:e:c:test_node:n#elb.arn')
-      n = build_test_node({ attrs: })
+      n = build_test_node(attrs: )
       n.set_values(nodes, constants)
       expect(n.depends_on).to eq [n0]
     end
@@ -29,12 +29,12 @@ describe GeoEngineer::GPS::Node do
 
   describe '#validate' do
     it 'validates agains the json schema' do
-      expect(build_test_node({ attrs: { "name" => "value" } }).validate()).to eq true
+      expect(build_test_node(attrs: { "name" => "value" } ).validate()).to eq true
     end
 
     it 'raises an error on bad validation' do
       expect {
-        build_test_node({ attrs: { "unknwon" => "value" } }).validate()
+        build_test_node(attrs: { "unknwon" => "value" }).validate()
       }.to raise_error(GeoEngineer::GPS::Node::NodeError)
     end
 
@@ -61,8 +61,8 @@ describe GeoEngineer::GPS::Node do
 
   describe '#where_all' do
     it 'returns all nodes with list of queries' do
-      t1 = build_test_node({ name: "t1" })
-      t2 = build_test_node({ name: "t2" })
+      t1 = build_test_node(name: "t1")
+      t2 = build_test_node(name: "t2")
       t1.all_nodes = [t1, t2]
 
       res = t1.where_all(["*:*:*:test_node:t1", "*:*:*:test_node:t2"])
@@ -74,8 +74,8 @@ describe GeoEngineer::GPS::Node do
 
   describe '#where' do
     it 'returns with defaults' do
-      t1 = build_test_node({ name: "t1" })
-      t2 = build_test_node({ name: "t2" })
+      t1 = build_test_node(name: "t1")
+      t2 = build_test_node(name: "t2")
       t1.all_nodes = [t1, t2]
       res = t1.where("*:*:*:test_node:*")
       expect(res.length).to eq 2
@@ -90,8 +90,8 @@ describe GeoEngineer::GPS::Node do
 
   describe '#find' do
     it 'returns a single node' do
-      t1 = build_test_node({ name: "t1" })
-      t2 = build_test_node({ name: "t2" })
+      t1 = build_test_node(name: "t1")
+      t2 = build_test_node(name: "t2")
       t1.all_nodes = [t1, t2]
 
       expect(t1.find("*:*:*:test_node:t2")).to eq t2

@@ -58,7 +58,7 @@ class GeoCLI
     return @environment if @environment
     if name != @env_name
       puts "Not loading environment #{name} as env_name is #{@env_name}" if @verbose
-      return NullObject.new
+      return nil
     end
 
     @environment = GeoEngineer::Environment.new(name, remote_state, &)

@@ -9,8 +9,8 @@
 class GeoEngineer::Resources::AwsEip < GeoEngineer::Resource
   validate :validate_instance_or_network_interface
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   # Can't associate both an instance and a network interface with an elastic IP
   def validate_instance_or_network_interface

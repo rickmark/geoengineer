@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsKinesisStream < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name, :shard_count]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { self[:name] } }
 
   def to_terraform_state

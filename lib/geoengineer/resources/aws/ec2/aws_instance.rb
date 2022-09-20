@@ -7,8 +7,8 @@ class GeoEngineer::Resources::AwsInstance < GeoEngineer::Resource
   validate -> { validate_required_attributes([:ami, :instance_type]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def self._all_remote_instances(provider)
     AwsClients.ec2(provider).describe_instances.reservations.map(&:instances).flatten.map(&:to_h)

@@ -8,7 +8,7 @@ class GeoEngineer::Resources::AwsIamInstanceProfile < GeoEngineer::Resource
 
   before :validation, -> { policy_arn _policy.to_ref(:arn) if _policy }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name.to_s } }
 
   def support_tags?

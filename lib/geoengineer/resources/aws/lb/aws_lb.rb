@@ -11,7 +11,7 @@ class GeoEngineer::Resources::AwsLb < GeoEngineer::Resource
   # default to "application"
   after :initialize, -> { self.load_balancer_type ||= "application" }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { "#{name}::#{load_balancer_type}" } }
 
   # The ALB client only allows fetching the tags from 20 ALBs at once

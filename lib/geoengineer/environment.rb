@@ -1,3 +1,5 @@
+# typed: true
+
 require 'parallel'
 
 ########################################################################
@@ -8,6 +10,7 @@ require 'parallel'
 # An environment has resources, has arbitrary attributes, validations and lifecycle hooks
 ########################################################################
 class GeoEngineer::Environment
+  extend T::Sig
   include HasAttributes
   include HasSubResources
   include HasResources
@@ -20,26 +23,26 @@ class GeoEngineer::Environment
 
   # Validate resources have unique attributes
   validate -> {
-    resources_of_type_grouped_by(&:terraform_name).map do |klass, grouped_resources|
+    resources_of_type_grouped_by(&:terraform_name).map do |_klass, grouped_resources|
       grouped_resources
-        .select { |k, v| v.length > 1 }
-        .map { |k, v| "Non-unique type.id #{v.first.for_resource}" }
+        .select { |_, v| v.length > 1 }
+        .map { |_, v| "Non-unique type.id #{v.first.for_resource}" }
     end.flatten
   }
 
   validate -> {
-    resources_of_type_grouped_by(&:_terraform_id).map do |klass, grouped_resources|
+    resources_of_type_grouped_by(&:_terraform_id).map do |_klass, grouped_resources|
       grouped_resources
-        .select { |k, v| v.length > 1 && !v.first._terraform_id.nil? }
-        .map { |k, v| "Non-unique _terraform_id #{v.first._terraform_id} #{v.first.for_resource}" }
+        .select { |_, v| v.length > 1 && !v.first._terraform_id.nil? }
+        .map { |_, v| "Non-unique _terraform_id #{v.first._terraform_id} #{v.first.for_resource}" }
     end.flatten
   }
 
   validate -> {
-    resources_of_type_grouped_by(&:_geo_id).map do |klass, grouped_resources|
+    resources_of_type_grouped_by(&:_geo_id).map do |_klass, grouped_resources|
       grouped_resources
-        .select { |k, v| v.length > 1 }
-        .map { |k, v| "Non-unique _geo_id #{v.first._geo_id} #{v.first.for_resource}" }
+        .select { |_, v| v.length > 1 }
+        .map { |_, v| "Non-unique _geo_id #{v.first._geo_id} #{v.first.for_resource}" }
     end.flatten
   }
 
@@ -51,22 +54,24 @@ class GeoEngineer::Environment
 
   before :validation, -> { self.region ||= ENV['AWS_REGION'] if ENV['AWS_REGION'] }
 
-  def initialize(name, remote_state = false, &)
+  sig { params(name: String, remote_state: T::Boolean, after: T.nilable(T.proc.void)).void }
+  def initialize(name, remote_state: false, &after)
     @name = name
     @outputs = []
     @providers = []
     @backends = []
     @remote_state_supported = remote_state
     self.send("#{name}?=", true) # e.g. staging?
-    instance_exec(self, &) if block_given?
+    instance_exec(self, &after) if block_given?
     execute_lifecycle(:after, :initialize)
   end
 
-  def project(org, name, &)
-    project = create_project(org, name, &)
-    supported_environments = [project.environments].flatten
+  sig { params(org: String, name: String, with: T.nilable(T.proc.void)).returns(T.nilable(GeoEngineer::Project)) }
+  def project(org, name, &with)
+    project = create_project(org, name, &with)
+    supported_environments = [project.environment].flatten
     # do not add the project if the project is not supported by this environment
-    return NullObject.new unless supported_environments.include?(@name)
+    return nil unless supported_environments.include?(@name)
 
     project
   end
@@ -190,7 +195,7 @@ class GeoEngineer::Environment
     reses = all_resources.select(&:_terraform_id) # _terraform_id must not be nil
 
     reses = Parallel.map(reses, { in_threads: Parallel.processor_count }) do |r|
-      { "#{r._type}.#{r.id}" => r.to_terraform_state() }
+      { "#{r._type}.#{r.id}" => r.to_terraform_state }
     end.reduce({}, :merge)
 
     {

@@ -13,7 +13,7 @@ class GeoEngineer::Resources::AwsCloudwatchEventRule < GeoEngineer::Resource
     ["#{self.id}: Need either schedule_expression or event_pattern defined"]
   end
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { self[:name] } }
 
   def support_tags?

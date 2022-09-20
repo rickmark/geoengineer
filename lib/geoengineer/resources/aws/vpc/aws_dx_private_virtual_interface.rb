@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsDxPrivateVirtualInterface < GeoEngineer::Resour
   validate -> { validate_required_attributes([:address_family, :bgp_asn, :connection_id, :name, :vlan]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def self._fetch_remote_resources(provider)

@@ -12,7 +12,7 @@ class GeoEngineer::Resources::AwsLbListenerRule < GeoEngineer::Resource
     validate_subresource_required_attributes(:condition, [:field, :values])
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { "#{listener_arn}::#{priority}" } }
 
   def support_tags?

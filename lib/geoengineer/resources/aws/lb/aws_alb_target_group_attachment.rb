@@ -4,12 +4,12 @@
 # {https://www.terraform.io/docs/providers/aws/r/aws_alb_target_group_attachment.html Terraform Docs}
 ########################################################################
 class GeoEngineer::Resources::AwsAlbTargetGroupAttachment < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   validate -> { validate_required_attributes([:target_group_arn, :target_id]) }
 
   before :validation, -> { target_group_arn _target_group.to_ref(:arn) if _target_group }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { "#{target_group_arn}:#{target_id}" } }
 
   def support_tags?

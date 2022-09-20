@@ -5,7 +5,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/cloudfront_origin_access_identity.html}
 ########################################################################
 class GeoEngineer::Resources::AwsCloudfrontOriginAccessIdentity < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { comment } }
 
   def self._all_access_identities(provider)

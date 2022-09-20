@@ -5,7 +5,7 @@
 ########################################################################
 class GeoEngineer::Resources::AwsOrganizationsOrganization < GeoEngineer::Resource
   after :initialize, -> {
-    _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id }
+    _terraform_id -> { remote_resource&._terraform_id }
   }
 
   # A fixed string is used here because an account can only have one

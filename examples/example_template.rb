@@ -21,7 +21,7 @@ environment("staging") {
   vpc_id      staging_vpc
 }
 
-class LoadBalancedInstance < Template
+class LoadBalancedInstance < RDoc::Options::Template
   attr_reader :elb, :elb_sg, :ec2_sg, :ec2_instance
 
   def initialize(name, project, parameters)

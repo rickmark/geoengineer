@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsVpcPeeringConnectionAccepter < GeoEngineer::Res
   validate -> { validate_required_attributes([:vpc_peering_connection_id]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { vpc_peering_connection_id } }
 
   def to_terraform_state

@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::GithubTeamRepository < GeoEngineer::Resource
   validate -> { validate_required_attributes([:team_id, :repository]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{team_id}:#{repository}" } }
 
   def self._fetch_remote_resources(provider)

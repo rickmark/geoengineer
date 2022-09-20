@@ -13,7 +13,7 @@ class GeoEngineer::Resources::AwsLambdaEventSourceMapping < GeoEngineer::Resourc
     end
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { [event_source_arn, function_name].join("::") } }
 
   def support_tags?

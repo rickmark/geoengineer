@@ -18,7 +18,7 @@ class GeoEngineer::Resources::AwsLambdaAlias < GeoEngineer::Resource
     end
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { [name, function_name, function_version].join("::") } }
 
   def support_tags?
@@ -36,9 +36,8 @@ class GeoEngineer::Resources::AwsLambdaAlias < GeoEngineer::Resource
 
   # TODO(Brad) - May need to implement solution for pagination...
   def self._fetch_functions(provider)
-    provider
-      .list_functions['functions']
-      .map(&:to_h)
+    return [] unless provider
+    provider.list_functions['functions'].map(&:to_h)
   end
 
   # TODO(Brad) - May need to implement solution for pagination...

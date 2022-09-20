@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsRoute < GeoEngineer::Resource
   validate -> { validate_required_attributes([:route_table_id, :destination_cidr_block]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{route_table_id}::#{destination_cidr_block}" } }
 
   def to_terraform_state

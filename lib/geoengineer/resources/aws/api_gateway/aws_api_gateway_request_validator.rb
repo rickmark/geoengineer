@@ -11,7 +11,7 @@ class GeoEngineer::Resources::AwsApiGatewayRequestValidator < GeoEngineer::Resou
   validate -> { validate_required_attributes([:rest_api_id, :name]) }
 
   after :initialize, -> { self.rest_api_id = _rest_api.to_ref }
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{_rest_api._geo_id}::#{name}" } }
 
   def support_tags?

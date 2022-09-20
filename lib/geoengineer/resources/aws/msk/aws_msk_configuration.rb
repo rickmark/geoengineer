@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsMskConfiguration < GeoEngineer::Resource
   validate -> { validate_required_attributes([:server_properties, :kafka_versions, :name]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { self[:name] } }
 
   def support_tags?

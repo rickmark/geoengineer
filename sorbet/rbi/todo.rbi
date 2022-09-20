@@ -5,7 +5,6 @@
 # typed: false
 
 module ::DISABLED; end
-module ::Template; end
 module Aws::ACMPCA::Client; end
 module Aws::APIGateway::Client; end
 module Aws::APIGateway::Errors::NotFoundException; end

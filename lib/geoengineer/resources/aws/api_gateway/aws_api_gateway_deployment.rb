@@ -22,7 +22,7 @@ class GeoEngineer::Resources::AwsApiGatewayDeployment < GeoEngineer::Resource
 
   after :initialize, -> { _geo_id -> { "#{_rest_api._geo_id}::#{stage_name}" } }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
 
   def to_terraform_state
     tfstate = super

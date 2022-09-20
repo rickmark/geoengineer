@@ -9,7 +9,7 @@ class GeoEngineer::Resources::AwsIamRolePolicyAttachment < GeoEngineer::Resource
 
   before :validation, -> { policy_arn _policy.to_ref(:arn) if _policy }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{role}:#{_policy&.name || policy_arn}" } }
 
   def support_tags?

@@ -14,7 +14,7 @@ class GeoEngineer::Resources::AwsLbListener < GeoEngineer::Resource
   # Since we can't know the ARN until the ALB exists, it is not a good candidate for the
   # _geo_id - instead we use the ALB name, which is also unique per region
   after :initialize, -> { _geo_id       -> { "#{_load_balancer_name}::#{port}::#{protocol}" } }
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
 
   def short_type
     "lb_listener"

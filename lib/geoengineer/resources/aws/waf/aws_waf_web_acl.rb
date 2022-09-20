@@ -5,7 +5,7 @@
 # {https://www.terraform.io/docs/providers/aws/r/waf_web_acl.html}
 ########################################################################
 class GeoEngineer::Resources::AwsWafWebAcl < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def self._all_web_acl_ids(provider)

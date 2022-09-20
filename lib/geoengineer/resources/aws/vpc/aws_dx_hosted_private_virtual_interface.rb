@@ -8,7 +8,7 @@ class GeoEngineer::Resources::AwsDxHostedPrivateVirtualInterface < GeoEngineer::
     validate_required_attributes([:address_family, :bgp_asn, :connection_id, :name, :vlan, :owner_account_id])
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name } }
 
   def support_tags?

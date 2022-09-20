@@ -8,6 +8,9 @@ AllCops:
     - 'geoengineer.gemspec'
     - 'lib/geoengineer/templates/*'
 
+Style/AccessorGrouping:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: false
 

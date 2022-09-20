@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sorbet'
 
   s.add_dependency 'netaddr'
+  s.add_dependency 'activemodel'
   s.add_dependency 'aws-sdk'
   s.add_dependency 'commander'
   s.add_dependency 'colorize'
@@ -39,4 +40,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'json-schema'
   s.add_dependency 'tty-pager'
   s.add_dependency 'pg'
+  s.add_dependency 'psych'
 end

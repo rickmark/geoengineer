@@ -8,7 +8,7 @@ class GeoEngineer::Resources::AwsIamGroupMembership < GeoEngineer::Resource
 
   before :validation, -> { group _group.to_ref(:name) if _group }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name.to_s } }
 
   def to_terraform_state

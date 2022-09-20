@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsLbTargetGroup < GeoEngineer::Resource
   validate :validate_target_group_attributes
   validate -> { validate_subresource_required_attributes(:stickiness, [:type]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { name } }
 
   MAX_RESOURCES_PER_REQUEST = 20

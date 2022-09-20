@@ -1,5 +1,4 @@
-require 'bundler'
-Bundler.setup
+require 'bundler/setup'
 require_relative '../lib/geoengineer'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

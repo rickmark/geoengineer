@@ -315,8 +315,8 @@ For example, in `aws_security_group`'s the resource is matched based on the `Nam
 
 ```ruby
 class GeoEngineer::Resources::AwsSecurityGroup < GeoEngineer::Resource
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def self._fetch_remote_resources(provider)
     AwsClients.ec2(provider)

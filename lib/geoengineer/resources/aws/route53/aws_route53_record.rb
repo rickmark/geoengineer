@@ -15,7 +15,7 @@ class GeoEngineer::Resources::AwsRoute53Record < GeoEngineer::Resource
     end
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{zone_id}_#{self.name&.downcase}_#{record_type}" } }
 
   def to_terraform_state

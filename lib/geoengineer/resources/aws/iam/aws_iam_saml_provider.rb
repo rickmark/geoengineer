@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsIamSamlProvider < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name, :saml_metadata_document]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { name.to_s } }
 
   def support_tags?

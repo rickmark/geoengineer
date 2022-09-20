@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsRoute53Zone < GeoEngineer::Resource
   handles_abstract_resource :dns_zone, for: :aws
   validate -> { validate_required_attributes([:name]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{self._public_or_private}-#{self.name}." } }
 
   def _public_or_private

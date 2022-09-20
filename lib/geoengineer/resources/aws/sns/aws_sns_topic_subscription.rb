@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsSnsTopicSubscription < GeoEngineer::Resource
   validate -> { validate_required_attributes([:protocol, :topic_arn, :endpoint]) }
 
   after :initialize, -> {
-    _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id }
+    _terraform_id -> { remote_resource&._terraform_id }
   }
   after :initialize, -> {
     _geo_id -> { "#{topic_arn}::#{protocol}::#{endpoint}" }

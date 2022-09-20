@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsCodedeployApp < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { self[:name] } }
 
   def support_tags?

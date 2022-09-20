@@ -6,7 +6,7 @@
 class GeoEngineer::Resources::AwsVpcEndpointService < GeoEngineer::Resource
   validate -> { validate_required_attributes([:network_load_balancer_arns, :acceptance_required]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { network_load_balancer_arns&.sort&.join('+') } }
 
   def support_tags?

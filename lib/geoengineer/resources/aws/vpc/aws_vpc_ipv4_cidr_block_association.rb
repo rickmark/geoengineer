@@ -13,7 +13,7 @@ class GeoEngineer::Resources::AwsVpcIpv4CidrBlockAssociation < GeoEngineer::Reso
     end
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{_vpc_id}::#{cidr_block}" } }
 
   def _vpc_id

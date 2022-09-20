@@ -10,7 +10,7 @@ class GeoEngineer::Resources::AwsNetworkAclRule < GeoEngineer::Resource
     )
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> {
     _geo_id -> {
       terraform_id_components = [

@@ -21,7 +21,7 @@ class GeoEngineer::Resources::AwsMskCluster < GeoEngineer::Resource
   validate :validate_cluster_name
   validate :validate_ebs_volume_size
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { self[:cluster_name] } }
 
   def validate_encryption_in_transit_protocol

@@ -1,18 +1,36 @@
+# typed: true
 require 'json-schema'
 
 # Node is a description of 1-many resources formally using GPS and JSON schema
 class GeoEngineer::GPS::Node
+  extend T::Sig
   class NodeError < StandardError; end
 
+  sig { returns(T::Boolean) }
   def self.meta?
     false
   end
 
+  sig { returns(T::Boolean) }
   def meta?
     false
   end
 
-  attr_reader :project, :environment, :configuration, :node_name, :attributes, :initial_attributes, :depends_on
+  sig { returns(String) }
+  attr_reader :node_name
+
+  sig { returns(T::Array[GeoEngineer::GPS::Node]) }
+  attr_reader :depends_on
+
+  sig { returns(String) }
+  attr_reader :project
+
+  sig { returns(String) }
+  attr_reader :environment
+
+  attr_reader :configuration
+  attr_reader :attributes
+  attr_reader :initial_attributes
 
   attr_accessor :all_nodes, :node_type, :constants
 
@@ -46,8 +64,8 @@ class GeoEngineer::GPS::Node
 
   # from ActiveSupport
   def build_node_type
-    class_name = self.class.name.split('::').last
-    class_name.gsub(/::/, '/')
+    class_name = T.must(self.class.name).split('::').last
+    T.must(class_name).gsub(/::/, '/')
               .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
               .gsub(/([a-z\d])([A-Z])/, '\1_\2')
               .tr("-", "_")
@@ -65,13 +83,13 @@ class GeoEngineer::GPS::Node
   def set_values(nodes, constants)
     self.all_nodes = nodes
     self.constants = constants
-    GeoEngineer::GPS::YamlTag.add_tag_context(self.attributes, { nodes:, constants:, context: {
+    GeoEngineer::GPS::YamlTag.add_tag_context(self.attributes, nodes:, constants:, context: {
                                                 project:,
                                                 environment:,
                                                 configuration:,
                                                 node_type:,
                                                 node_name:
-                                              } })
+                                              })
 
     @depends_on += references
     @depends_on = @depends_on.flatten.uniq
@@ -83,7 +101,7 @@ class GeoEngineer::GPS::Node
   end
 
   def references
-    refs = []
+    refs = T.let([], T::Array[T.untyped])
 
     # calculate references from YAML tags
     HashUtils.map_values(attributes) do |a|
@@ -139,7 +157,7 @@ class GeoEngineer::GPS::Node
   # 2. ref method which can be used
   # 3. create method which sets the resource with the correct ref
   def self.define_resource(type, name, id_lambda = nil)
-    load_gps_file = -> { load_gps_file() }
+    load_gps_file = -> { load_gps_file }
     id_lambda = -> { resource_id(name) } if id_lambda.nil?
     read_method = name.to_s
     ref_method = "#{name}_ref"

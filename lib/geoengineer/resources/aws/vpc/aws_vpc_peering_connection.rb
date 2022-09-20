@@ -7,8 +7,8 @@ class GeoEngineer::Resources::AwsVpcPeeringConnection < GeoEngineer::Resource
   validate -> { validate_required_attributes([:peer_owner_id, :peer_vpc_id, :vpc_id]) }
   validate -> { validate_has_tag(:Name) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def self._fetch_remote_resources(provider)
     AwsClients

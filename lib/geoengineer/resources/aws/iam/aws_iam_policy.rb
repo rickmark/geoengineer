@@ -9,15 +9,15 @@ class GeoEngineer::Resources::AwsIamPolicy < GeoEngineer::Resource
   validate -> { validate_resources_not_empty(self.policy) }
 
   after :initialize, -> {
-    _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id }
+    _terraform_id -> { remote_resource&._terraform_id }
   }
   after :initialize, -> {
     _geo_id -> { name.to_s }
   }
 
   def to_terraform_state
-    arn = NullObject.maybe(remote_resource).arn
-    default_version_id = NullObject.maybe(remote_resource).default_version_id
+    arn = remote_resource&.arn
+    default_version_id = remote_resource&.default_version_id
 
     policy = _get_policy_document(arn, default_version_id)
 

@@ -22,8 +22,8 @@ class GeoEngineer::Resources::AwsNetworkAcl < GeoEngineer::Resource
     end
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def self._fetch_remote_resources(provider)
     AwsClients.ec2(provider).describe_network_acls['network_acls'].map(&:to_h).map do |network_acl|

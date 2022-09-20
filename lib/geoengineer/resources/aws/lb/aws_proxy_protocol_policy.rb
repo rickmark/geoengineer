@@ -8,7 +8,7 @@ class GeoEngineer::Resources::AwsProxyProtocolPolicy < GeoEngineer::Resource
 
   # _terraform_id is the ELB, and the name of the policy, i.e. "TFEnableProxyProtocol"
   after :initialize, -> {
-    _terraform_id -> { "#{NullObject.maybe(load_balancer)._terraform_id}:TFEnableProxyProtocol" }
+    _terraform_id -> { "#{load_balancer&._terraform_id}:TFEnableProxyProtocol" }
   }
 
   # The loadbalancer and the instance ports are necessary in the terraform state for the policy

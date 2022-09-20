@@ -7,7 +7,7 @@ class GeoEngineer::Resources::AwsSesReceiptRule < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name, :rule_set_name]) }
 
   after :initialize, -> {
-    _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id }
+    _terraform_id -> { remote_resource&._terraform_id }
   }
   after :initialize, -> {
     _geo_id -> { name.to_s }

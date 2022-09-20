@@ -16,7 +16,7 @@ class GeoEngineer::Resources::AwsCloudwatchMetricAlarm < GeoEngineer::Resource
                                  ])
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id       -> { alarm_name } }
 
   def support_tags?

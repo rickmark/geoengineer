@@ -42,7 +42,7 @@ class GeoEngineer::Resources::AwsApiGatewayResource < GeoEngineer::Resource
     }
   }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _id -> { _terraform_id } }
 
   def to_terraform_state

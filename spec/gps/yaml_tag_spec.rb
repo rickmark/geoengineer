@@ -9,20 +9,20 @@ describe GeoEngineer::GPS::YamlTag do
   context '!sub' do
     it 'replaces constant' do
       yaml = YAML.load('test: !sub prefix-{{constant:e:here}}-postfix')
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq "prefix-hello-postfix"
     end
 
     it 'replaces constants' do
       yaml = YAML.load('test: !sub prefix-{{constant:e:here}}-midfix-{{constant:e:here}}-postfix')
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq "prefix-hello-midfix-hello-postfix"
     end
 
     context 'references' do
       it 'returns a list of referenced nodes' do
         yaml = YAML.load('test: !sub prefix-{{p:e:c:test_node:n#elb}}-postfix')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
         expect(yaml["test"].references).to eq [n0]
       end
     end
@@ -31,24 +31,24 @@ describe GeoEngineer::GPS::YamlTag do
   context '!ref' do
     it 'replaces constant' do
       yaml = YAML.load('test: !ref constant:e:here')
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq "hello"
     end
 
     it 'replaces node with terraform id or arn' do
       yaml = YAML.load('test: !ref p:e:c:test_node:n#elb')
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq "${aws_elb.elb_p_c_test_node_n.id}"
 
       yaml = YAML.load('test: !ref p:e:c:test_node:n#elb.arn')
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq "${aws_elb.elb_p_c_test_node_n.arn}"
     end
 
     context 'references' do
       it 'returns a list of referenced nodes' do
         yaml = YAML.load('test: !ref p:e:c:test_node:n#elb')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, nodes:, constants: )
         expect(yaml["test"].references).to eq [n0]
       end
     end
@@ -56,33 +56,33 @@ describe GeoEngineer::GPS::YamlTag do
     context 'context' do
       it 'replaces project' do
         yaml = YAML.load('test: !ref :e:c:test_node:n#elb.arn')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, {
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml,
                                                     nodes:, constants:, context: { project: "p" }
-                                                  })
+                                                  )
         expect(HashUtils.json_dup(yaml)["test"]).to eq "${aws_elb.elb_p_c_test_node_n.arn}"
       end
 
       it 'replaces env for constant' do
         yaml = YAML.load('test: !ref constant::here')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, {
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml,
                                                     nodes:, constants:, context: { environment: "e" }
-                                                  })
+                                                  )
         expect(HashUtils.json_dup(yaml)["test"]).to eq "hello"
       end
 
       it 'replaces env for node' do
         yaml = YAML.load('test: !ref p::c:test_node:n#elb.arn')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, {
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml,
                                                     nodes:, constants:, context: { environment: "e" }
-                                                  })
+                                                  )
         expect(HashUtils.json_dup(yaml)["test"]).to eq "${aws_elb.elb_p_c_test_node_n.arn}"
       end
 
       it 'replaces config' do
         yaml = YAML.load('test: !ref p:e::test_node:n#elb.arn')
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, {
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml,
                                                     nodes:, constants:, context: { configuration: "c" }
-                                                  })
+                                                  )
         expect(HashUtils.json_dup(yaml)["test"]).to eq "${aws_elb.elb_p_c_test_node_n.arn}"
       end
     end
@@ -103,7 +103,7 @@ describe GeoEngineer::GPS::YamlTag do
         - - !ref constant:e:here
         - !ref constant:e:here
       ")
-      GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { constants: })
+      GeoEngineer::GPS::YamlTag.add_tag_context(yaml,  constants: )
       expect(HashUtils.json_dup(yaml)["test"]).to eq ["hello", "hello", "hello"]
     end
 
@@ -112,7 +112,7 @@ describe GeoEngineer::GPS::YamlTag do
         yaml = YAML.load("test: !flatten
           - !ref p:e:c:test_node:n#elb
         ")
-        GeoEngineer::GPS::YamlTag.add_tag_context(yaml, { nodes:, constants: })
+        GeoEngineer::GPS::YamlTag.add_tag_context(yaml,  nodes:, constants: )
         expect(yaml["test"].references).to eq [n0]
       end
     end

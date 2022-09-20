@@ -6,8 +6,8 @@
 class GeoEngineer::Resources::AwsRoute53ResolverEndpoint < GeoEngineer::Resource
   validate -> { validate_required_attributes([:name, :direction, :ip_address, :security_group_ids]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
-  after :initialize, -> { _geo_id -> { NullObject.maybe(tags)[:Name] } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
+  after :initialize, -> { _geo_id -> { tags&.dig(:Name) } }
 
   def self._fetch_remote_resources(provider)
     AwsClients.route53resolver(provider)

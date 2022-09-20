@@ -10,7 +10,7 @@ class GeoEngineer::Resources::AwsApiGatewayBasePathMapping < GeoEngineer::Resour
 
   validate -> { validate_required_attributes([:api_id, :stage_name]) }
 
-  after :initialize, -> { _terraform_id -> { NullObject.maybe(remote_resource)._terraform_id } }
+  after :initialize, -> { _terraform_id -> { remote_resource&._terraform_id } }
   after :initialize, -> { _geo_id -> { "#{api_id}::#{stage_name}::#{base_path}" } }
 
   def self._fetch_remote_resources(provider)
