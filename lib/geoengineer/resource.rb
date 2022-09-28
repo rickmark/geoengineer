@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Resources are the core of GeoEngineer and are mapped 1:1 to terraform resources
 #
@@ -17,7 +19,9 @@ class GeoEngineer::Resource
   include HasValidations
   include HasLifecycle
 
-  attr_accessor :environment, :project, :template
+  attr_accessor :environment
+  attr_accessor :project
+  attr_accessor :template
 
   attr_reader :_type, :id
 

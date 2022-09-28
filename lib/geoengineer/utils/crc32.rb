@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Crc32 is a pure ruby implementation of CRC32. Copied from:
 # - http://www.codeography.com/2009/05/22/pure-ruby-crc32-adccp-pkzip.html

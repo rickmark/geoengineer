@@ -258,6 +258,8 @@ class GeoEngineer::GPS
       self.environment = project_environments
     end
 
+    project = T.must(project)
+
     project_nodes = where("#{project_name}:#{environment_name}:*:*:*")
     create_all_resource_for_project(project, project_nodes)
 

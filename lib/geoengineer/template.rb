@@ -1,7 +1,10 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Override to define recommended patterns of resource use
 ########################################################################
 class GeoEngineer::Template
+  extend T::Sig
   include HasAttributes
   include HasResources
 
@@ -11,6 +14,7 @@ class GeoEngineer::Template
 
   attr_accessor :name, :parameters, :parent
 
+  sig { params(name: String, parent: T.any(NilClass, GeoEngineer::Project, GeoEngineer::Environment), parameters: Hash).void }
   def initialize(name, parent, parameters = {})
     @name = name
     @parameters = parameters
@@ -22,10 +26,12 @@ class GeoEngineer::Template
     end
   end
 
-  # Helper method to accomodate different parents
+  sig { params(project: GeoEngineer::Project).returns(GeoEngineer::Template) }
+  # Helper method to accommodate different parents
   def add_project_attributes(project)
     @project = project
     @environment = project.environment
+    self
   end
 
   def add_env_attributes(environment)
@@ -103,6 +109,7 @@ class GeoEngineer::Template
     id.to_s.gsub(/[^a-zA-Z0-9\-_]/, '-')
   end
 
+  sig { params(service: String).returns(String) }
   def _assume_policy(service)
     {
       Version: "2012-10-17",

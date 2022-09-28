@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # SubResources are included in resources with their own rules
 #

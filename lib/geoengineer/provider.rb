@@ -1,9 +1,12 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Outputs are mapped 1:1 to terraform outputs
 #
 # {https://www.terraform.io/docs/providers/aws/ Terraform Docs}
 ########################################################################
 class GeoEngineer::Provider
+  extend T::Sig
   attr_reader :id
 
   include HasAttributes
@@ -14,6 +17,7 @@ class GeoEngineer::Provider
     instance_exec(self, &) if block_given?
   end
 
+  sig { returns(String) }
   def terraform_id
     if self.alias
       "#{id}.#{self.alias}"
@@ -23,6 +27,7 @@ class GeoEngineer::Provider
   end
 
   ## Terraform methods
+  sig { returns(String) }
   def to_terraform
     sb = ["provider #{@id.inspect} { "]
 

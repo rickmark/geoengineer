@@ -1,4 +1,5 @@
 # typed: true
+# frozen_string_literal: true
 ########################################################################
 # Projects are groups of resources used to organize and validate.
 #
@@ -13,7 +14,9 @@ class GeoEngineer::Project
   include HasSubResources
   include HasValidations
 
-  attr_accessor :org, :name
+  attr_accessor :org
+
+  attr_accessor :name
 
   ## Environment is an object of type GeoEngineer::Environment
   sig { returns(GeoEngineer::Environment) }

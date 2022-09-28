@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasResources provides methods for a class to contain and query a set of resources
 ########################################################################

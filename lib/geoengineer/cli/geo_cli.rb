@@ -1,3 +1,6 @@
+# typed: true
+# frozen_string_literal: true
+#
 require_relative '../../geoengineer'
 require 'open3'
 require 'commander'

@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 # Status Command for Geo
 module GeoCLI::StatusCommand
   def calculate_type_status(codified, uncodified)

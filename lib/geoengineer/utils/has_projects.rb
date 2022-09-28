@@ -1,4 +1,5 @@
 # typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasProjects provides methods for a class to contain and query a set of projects
 ########################################################################

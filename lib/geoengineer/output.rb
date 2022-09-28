@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Outputs are mapped 1:1 to terraform outputs
 #

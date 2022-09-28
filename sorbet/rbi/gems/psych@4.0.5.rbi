@@ -98,16 +98,16 @@ end
 #
 # ==== Writing to a string
 #
-#   # Dump an array, get back a YAML string
+#   # HclDump an array, get back a YAML string
 #   Psych.dump(['a', 'b'])  # => "---\n- a\n- b\n"
 #
-#   # Dump an array to an IO object
+#   # HclDump an array to an IO object
 #   Psych.dump(['a', 'b'], StringIO.new)  # => #<StringIO:0x000001009d0890>
 #
-#   # Dump an array with indentation set
+#   # HclDump an array with indentation set
 #   Psych.dump(['a', ['b']], :indentation => 3) # => "---\n- a\n-  - b\n"
 #
-#   # Dump an array to an IO with indentation set
+#   # HclDump an array to an IO with indentation set
 #   Psych.dump(['a', ['b']], StringIO.new, :indentation => 3)
 #
 # ==== Writing to a file
@@ -250,7 +250,7 @@ module Psych
     #   Psych.dump(o, io)           -> io object passed in
     #   Psych.dump(o, io, options)  -> io object passed in
     #
-    # Dump Ruby object +o+ to a YAML string.  Optional +options+ may be passed in
+    # HclDump Ruby object +o+ to a YAML string.  Optional +options+ may be passed in
     # to control the output format.  If an IO object is passed in, the YAML will
     # be dumped to that IO object.
     #
@@ -274,22 +274,22 @@ module Psych
     #
     # Example:
     #
-    #   # Dump an array, get back a YAML string
+    #   # HclDump an array, get back a YAML string
     #   Psych.dump(['a', 'b'])  # => "---\n- a\n- b\n"
     #
-    #   # Dump an array to an IO object
+    #   # HclDump an array to an IO object
     #   Psych.dump(['a', 'b'], StringIO.new)  # => #<StringIO:0x000001009d0890>
     #
-    #   # Dump an array with indentation set
+    #   # HclDump an array with indentation set
     #   Psych.dump(['a', ['b']], indentation: 3) # => "---\n- a\n-  - b\n"
     #
-    #   # Dump an array to an IO with indentation set
+    #   # HclDump an array to an IO with indentation set
     #   Psych.dump(['a', ['b']], StringIO.new, indentation: 3)
     #
     # source://psych//lib/psych.rb#505
     def dump(o, io = T.unsafe(nil), options = T.unsafe(nil)); end
 
-    # Dump a list of objects as separate documents to a document stream.
+    # HclDump a list of objects as separate documents to a document stream.
     #
     # Example:
     #
@@ -474,16 +474,16 @@ module Psych
     #
     # Example:
     #
-    #   # Dump an array, get back a YAML string
+    #   # HclDump an array, get back a YAML string
     #   Psych.safe_dump(['a', 'b'])  # => "---\n- a\n- b\n"
     #
-    #   # Dump an array to an IO object
+    #   # HclDump an array to an IO object
     #   Psych.safe_dump(['a', 'b'], StringIO.new)  # => #<StringIO:0x000001009d0890>
     #
-    #   # Dump an array with indentation set
+    #   # HclDump an array with indentation set
     #   Psych.safe_dump(['a', ['b']], indentation: 3) # => "---\n- a\n-  - b\n"
     #
-    #   # Dump an array to an IO with indentation set
+    #   # HclDump an array to an IO with indentation set
     #   Psych.safe_dump(['a', ['b']], StringIO.new, indentation: 3)
     #
     # source://psych//lib/psych.rb#578
@@ -544,7 +544,7 @@ module Psych
     # source://psych//lib/psych.rb#658
     def safe_load_file(filename, **kwargs); end
 
-    # Dump Ruby +object+ to a JSON string.
+    # HclDump Ruby +object+ to a JSON string.
     #
     # source://psych//lib/psych.rb#605
     def to_json(object); end

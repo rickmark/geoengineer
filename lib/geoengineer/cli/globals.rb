@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 # This ruby file includes the GeoCLI global methods
 # It should not be included in the library
 require_relative './geo_cli'

@@ -1,9 +1,14 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # Outputs are mapped 1:1 to terraform outputs
 #
 # {https://www.terraform.io/docs/backends Terraform Docs}
 ########################################################################
 class GeoEngineer::Backend
+  extend T::Sig
+
+  sig { returns(String) }
   attr_reader :id
 
   include HasAttributes
@@ -15,11 +20,7 @@ class GeoEngineer::Backend
   end
 
   def terraform_id
-    if self.alias
-      "#{id}.#{self.alias}"
-    else
-      id
-    end
+    self.alias ? "#{id}.#{self.alias}" : id
   end
 
   ## Terraform methods

@@ -1,4 +1,5 @@
 # typed: true
+# frozen_string_literal: true
 
 require 'parallel'
 
@@ -19,7 +20,12 @@ class GeoEngineer::Environment
   include HasValidations
   include HasLifecycle
 
-  attr_reader :name, :remote_state_supported
+  sig { returns(String) }
+  attr_reader :name
+
+  sig { returns(T::Boolean) }
+  attr_reader :remote_state_supported
+
 
   # Validate resources have unique attributes
   validate -> {
@@ -69,6 +75,7 @@ class GeoEngineer::Environment
   sig { params(org: String, name: String, with: T.nilable(T.proc.void)).returns(T.nilable(GeoEngineer::Project)) }
   def project(org, name, &with)
     project = create_project(org, name, &with)
+    T.must(project)
     supported_environments = [project.environment].flatten
     # do not add the project if the project is not supported by this environment
     return nil unless supported_environments.include?(@name)

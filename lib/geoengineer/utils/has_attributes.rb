@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasAttributes allows objects to have arbitrary attributes associated with it.
 ########################################################################

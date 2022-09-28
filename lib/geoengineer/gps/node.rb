@@ -57,6 +57,7 @@ class GeoEngineer::GPS::Node
       (@configuration == config || config == "*")
   end
 
+  sig { params(node_type: String, node_name: String).returns(T::Boolean) }
   def node_match(node_type, node_name)
     (@node_type == node_type || node_type == "*") &&
       (@node_name == node_name || node_name == "*")

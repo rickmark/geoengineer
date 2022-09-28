@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 # Stubs for `geo test` command
 module GeoCLI::TestCmdStubs
   def self.stub!

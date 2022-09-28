@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasLifecycle provides methods to enable lifecycle hooks
 ########################################################################
@@ -8,6 +10,9 @@ module HasLifecycle
 
   # ClassMethods
   module ClassMethods
+    extend T::Sig
+
+    sig { returns(Hash) }
     def _init_validation_hash
       {
         after: {},
@@ -15,6 +20,7 @@ module HasLifecycle
       }
     end
 
+    sig { params(stage: T.any(String, Symbol), step: T.any(Symbol, String)).returns(Array) }
     def lifecycle_actions(stage, step)
       all = []
       # inherit lifecycle_actions
@@ -27,6 +33,7 @@ module HasLifecycle
       all
     end
 
+    sig { params(lifecycle_step: Symbol, method_name_or_proc: T.any(String, Symbol, T.proc.returns(T::Boolean))).void }
     # Currently only supporting after(:initialize)
     def after(lifecycle_step, method_name_or_proc)
       @_actions = _init_validation_hash unless @_actions
@@ -34,6 +41,7 @@ module HasLifecycle
       @_actions[:after][lifecycle_step] << method_name_or_proc
     end
 
+    sig { params(lifecycle_step: Symbol, method_name_or_proc: T.any(String, Symbol, T.proc.returns(T::Boolean))).void }
     def before(lifecycle_step, method_name_or_proc)
       @_actions = _init_validation_hash unless @_actions
       @_actions[:before][lifecycle_step] = [] unless @_actions[:before][lifecycle_step]

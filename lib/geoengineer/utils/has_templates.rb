@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasTemplates provides methods for a class to contain and query a set of templates
 ########################################################################

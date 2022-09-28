@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # TerraformCommands provides command line terraform commands
 # +plan+ and +apply+ for GeoEngineer

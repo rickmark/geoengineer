@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # GithubClient exposes a set of API calls to fetch data from GitHub.
 # The primary reason for centralizing them here is testing and stubbing.

@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 # HashUtils class for helper methods
 class HashUtils
   ALLOWED_UNDERSCORE_KEYWORDS = %w[_default].freeze

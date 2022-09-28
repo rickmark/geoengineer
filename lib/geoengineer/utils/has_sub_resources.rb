@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # HasSubResources provides methods for a object to contain subresources
 ########################################################################

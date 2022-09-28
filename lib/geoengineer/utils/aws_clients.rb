@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # AwsClients contains a list of aws-clients for use
 # The main reason for their central management is their initialisation testing and stubbing

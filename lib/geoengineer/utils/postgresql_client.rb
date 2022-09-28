@@ -1,3 +1,5 @@
+# typed: true
+# frozen_string_literal: true
 ########################################################################
 # PostgresqlClient exposes a set of API calls to fetch data from Postgresql.
 # The primary reason for centralizing them here is testing and stubbing.
